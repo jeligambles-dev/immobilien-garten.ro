@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   Scissors,
   TreePine,
@@ -10,6 +11,7 @@ import {
   Package,
   Phone,
   Wrench,
+  ArrowRight,
 } from "lucide-react";
 
 const tabs = ["Servicii", "Produse"];
@@ -18,52 +20,50 @@ const servicii = [
   {
     icon: Scissors,
     title: "Tuns Gazon",
-    price: "La cerere",
+    price: "De la 0.50 lei/mp",
     desc: "Tundere profesională cu echipamente de ultimă generație. Include colectarea resturilor vegetale.",
-    features: [
-      "Echipament profesional",
-      "Colectare resturi",
-      "Contur curat la margini",
-    ],
+    features: ["Echipament profesional", "Colectare resturi", "Contur curat la margini"],
+    href: "/servicii/tuns-gazon",
   },
   {
     icon: Leaf,
     title: "Scarificare & Aerisire",
-    price: "La cerere",
+    price: "De la 1 leu/mp",
     desc: "Regenerarea gazonului prin eliminarea mușchiului și a stratului de feltru acumulat.",
-    features: [
-      "Eliminare mușchi",
-      "Aerisire profundă",
-      "Rezultate vizibile rapid",
-    ],
+    features: ["Eliminare mușchi", "Aerisire profundă", "Rezultate vizibile rapid"],
+    href: "/servicii/scarificare",
   },
   {
     icon: TreePine,
     title: "Toaletare Pomi & Arbuști",
-    price: "La cerere",
+    price: "De la 50 lei/buc",
     desc: "Tăiere profesională, modelare și întreținere pentru un aspect sănătos și estetic.",
     features: ["Tăiere de formare", "Eliminare ramuri uscate", "Modelare"],
+    href: "/servicii/toaletare-pomi",
   },
   {
     icon: Sprout,
     title: "Tuns Gard Viu",
-    price: "La cerere",
+    price: "De la 5 lei/ml",
     desc: "Modelare precisă a gardurilor vii, de la forme simple la geometrice complexe.",
     features: ["Forme geometrice", "Curățare", "Înălțimi uniforme"],
+    href: "/servicii/gard-viu",
   },
   {
     icon: Wrench,
     title: "Plantări Profesionale",
-    price: "La cerere",
+    price: "De la 15 lei/mp",
     desc: "Serviciu complet de plantare: flori, arbuști, copaci, plante ornamentale.",
     features: ["Design peisagistic", "Plantare & fixare", "Sfaturi întreținere"],
+    href: "/servicii/plantari",
   },
   {
     icon: Droplets,
     title: "Sisteme de Irigații",
-    price: "La cerere",
+    price: "De la 8 lei/mp",
     desc: "Proiectare, montaj și întreținere sisteme automate de irigații.",
     features: ["Proiectare personalizată", "Montaj profesional", "Garanție"],
+    href: "/servicii/irigatii",
   },
 ];
 
@@ -182,13 +182,24 @@ export default function Produse() {
                   </li>
                 ))}
               </ul>
-              <a
-                href="tel:0747469681"
-                className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold text-sm py-2.5 rounded-xl transition-colors duration-200 cursor-pointer"
-              >
-                <Phone className="h-4 w-4" />
-                Solicită Ofertă
-              </a>
+              <div className="flex gap-2">
+                <a
+                  href="tel:0747469681"
+                  className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold text-sm py-2.5 rounded-xl transition-colors duration-200 cursor-pointer"
+                >
+                  <Phone className="h-4 w-4" />
+                  Solicită Ofertă
+                </a>
+                {"href" in item && (item as { href?: string }).href ? (
+                  <Link
+                    href={(item as { href: string }).href}
+                    className="flex items-center justify-center gap-1 border border-green-200 hover:border-green-400 text-green-600 font-semibold text-sm py-2.5 px-4 rounded-xl transition-colors duration-200"
+                  >
+                    Detalii
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                ) : null}
+              </div>
             </div>
           ))}
         </div>

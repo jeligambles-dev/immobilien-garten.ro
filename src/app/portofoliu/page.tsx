@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { X, ImageIcon } from "lucide-react";
+import { SkeletonGrid } from "@/components/Skeleton";
 
 interface Project {
   id: string;
@@ -35,11 +36,15 @@ export default function Portofoliu() {
   const [active, setActive] = useState("Toate");
   const [selected, setSelected] = useState<Project | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/admin/portfolio")
       .then((r) => r.json())
-      .then(setProjects);
+      .then((data) => {
+        setProjects(data);
+        setLoading(false);
+      });
   }, []);
 
   const filtered =
@@ -78,7 +83,9 @@ export default function Portofoliu() {
         </div>
 
         {/* Grid */}
-        {filtered.length === 0 ? (
+        {loading ? (
+          <SkeletonGrid count={6} />
+        ) : filtered.length === 0 ? (
           <div className="text-center py-16">
             <ImageIcon className="h-12 w-12 text-slate-300 mx-auto mb-3" />
             <p className="text-slate-500">

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import HeroCarousel from "@/components/HeroCarousel";
+import BeforeAfter from "@/components/BeforeAfter";
 
 const services = [
   {
@@ -107,7 +108,7 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-            <div className="hidden lg:block">
+            <div>
               <HeroCarousel />
             </div>
           </div>
@@ -146,6 +147,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Before/After */}
+      <BeforeAfter />
 
       {/* Why Us */}
       <section className="py-20">
