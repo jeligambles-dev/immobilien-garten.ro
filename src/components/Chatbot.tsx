@@ -16,7 +16,7 @@ const quickReplies = [
   "Aveți gazon artificial?",
 ];
 
-const prices: Record<string, { unit: string; min: number; max: number }> = {
+const defaultPrices: Record<string, { unit: string; min: number; max: number }> = {
   "Tuns gazon": { unit: "mp", min: 0.5, max: 1.5 },
   "Scarificare & aerisire": { unit: "mp", min: 1, max: 2.5 },
   "Toaletare pomi": { unit: "buc", min: 50, max: 200 },
@@ -44,7 +44,7 @@ function getBotResponse(input: string): string {
   return "Mulțumim pentru mesaj! Pentru informații detaliate sau o ofertă personalizată, sună-ne la 0747 469 681 sau scrie \"Estimare preț\" pentru un calcul rapid.";
 }
 
-function PriceCalculator({ onResult }: { onResult: (text: string) => void }) {
+function PriceCalculator({ onResult, prices }: { onResult: (text: string) => void; prices: Record<string, { unit: string; min: number; max: number }> }) {
   const [service, setService] = useState("");
   const [qty, setQty] = useState("");
 
@@ -110,7 +110,23 @@ export default function Chatbot() {
     },
   ]);
   const [input, setInput] = useState("");
+  const [prices, setPrices] = useState<Record<string, { unit: string; min: number; max: number }>>(defaultPrices);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch("/api/admin/content")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.services?.length) {
+          const p: Record<string, { unit: string; min: number; max: number }> = {};
+          data.services.forEach((s: { title: string; unit: string; priceMin: number; priceMax: number }) => {
+            p[s.title] = { unit: s.unit, min: s.priceMin, max: s.priceMax };
+          });
+          setPrices(p);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -217,7 +233,7 @@ export default function Chatbot() {
                 </div>
                 {msg.type === "calculator" && (
                   <div className="ml-9 mt-2">
-                    <PriceCalculator onResult={handleCalculatorResult} />
+                    <PriceCalculator onResult={handleCalculatorResult} prices={prices} />
                   </div>
                 )}
               </div>

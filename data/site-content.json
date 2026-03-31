@@ -1,0 +1,23 @@
+{
+  "heroSlides": [
+    { "id": "1", "src": "/hero-1.jpg", "label": "Gazon Profesional", "desc": "Tuns gazon cu dungi perfecte" },
+    { "id": "2", "src": "/hero-2.jpg", "label": "Întreținere Completă", "desc": "Gazon și gard viu impecabil" },
+    { "id": "3", "src": "/hero-3.jpg", "label": "Amenajare Curte", "desc": "Pavaje, plantări, design peisagistic" },
+    { "id": "4", "src": "/hero-4.jpg", "label": "Echipă Profesionistă", "desc": "Lucrăm rapid, curat și cu atenție" }
+  ],
+  "beforeAfter": [
+    { "id": "1", "label": "Amenajare Grădină cu Pietriș", "desc": "De la teren gol cu barieră anti-buruieni la grădină decorativă cu pietriș, lavandă și elemente ornamentale.", "before": "/uploads/portfolio/before-gravel.jpg", "after": "/uploads/portfolio/after-gravel.jpg" },
+    { "id": "2", "label": "Regenerare Gazon", "desc": "Gazon deteriorat și plin de pete transformate într-un covor verde uniform, tuns profesional.", "before": "/uploads/portfolio/before-lawn.jpg", "after": "/uploads/portfolio/after-lawn.jpg" },
+    { "id": "3", "label": "Curățare și Întreținere Curte", "desc": "Zonă cu buruieni și pietriș neglijat transformată în gazon impecabil cu gard viu.", "before": "/uploads/portfolio/before-fence.jpg", "after": "/uploads/portfolio/after-fence.jpg" }
+  ],
+  "services": [
+    { "id": "1", "title": "Tuns Gazon", "price": "De la 0.50 lei/mp", "priceMin": 0.5, "priceMax": 1.5, "unit": "mp" },
+    { "id": "2", "title": "Scarificare & Aerisire", "price": "De la 1 leu/mp", "priceMin": 1, "priceMax": 2.5, "unit": "mp" },
+    { "id": "3", "title": "Toaletare Pomi & Arbuști", "price": "De la 50 lei/buc", "priceMin": 50, "priceMax": 200, "unit": "buc" },
+    { "id": "4", "title": "Tuns Gard Viu", "price": "De la 5 lei/ml", "priceMin": 5, "priceMax": 15, "unit": "ml" },
+    { "id": "5", "title": "Plantări Profesionale", "price": "De la 15 lei/mp", "priceMin": 15, "priceMax": 40, "unit": "mp" },
+    { "id": "6", "title": "Montaj Gazon Rulou", "price": "De la 20 lei/mp", "priceMin": 20, "priceMax": 35, "unit": "mp" },
+    { "id": "7", "title": "Gazon Artificial", "price": "De la 40 lei/mp", "priceMin": 40, "priceMax": 80, "unit": "mp" },
+    { "id": "8", "title": "Sistem Irigații", "price": "De la 8 lei/mp", "priceMin": 8, "priceMax": 20, "unit": "mp" }
+  ]
+}
