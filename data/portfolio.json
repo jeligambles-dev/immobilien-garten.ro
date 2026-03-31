@@ -1,0 +1,98 @@
+[
+  {
+    "id": "1",
+    "title": "Gazon cu dungi perfecte",
+    "category": "Gazon",
+    "description": "Tuns gazon profesional cu efect de dungi, folosind echipament ride-on de ultimă generație.",
+    "image": "/uploads/portfolio/gazon-1.jpg",
+    "createdAt": "2026-03-31T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "title": "Întreținere gazon rezidențial",
+    "category": "Gazon",
+    "description": "Gazon tuns impecabil de-a lungul gardului, cu margini curate și aspect uniform.",
+    "image": "/uploads/portfolio/gazon-2.jpg",
+    "createdAt": "2026-03-31T00:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "title": "Echipa la lucru",
+    "category": "Gazon",
+    "description": "Lucrăm rapid și profesionist cu echipamente moderne pentru rezultate vizibile imediat.",
+    "image": "/uploads/portfolio/gazon-3.jpg",
+    "createdAt": "2026-03-31T00:00:00.000Z"
+  },
+  {
+    "id": "4",
+    "title": "Toaletare gard viu înalt",
+    "category": "Gard Viu",
+    "description": "Tăiere profesională a gardului viu cu echipament specializat, pentru un aspect curat și uniform.",
+    "image": "/uploads/portfolio/gard-viu-1.jpg",
+    "createdAt": "2026-03-31T00:00:00.000Z"
+  },
+  {
+    "id": "5",
+    "title": "Gard viu de conifere",
+    "category": "Gard Viu",
+    "description": "Gard viu dens din tuia/leyland cypress, bine întreținut, formând un perete verde natural.",
+    "image": "/uploads/portfolio/gard-viu-2.jpg",
+    "createdAt": "2026-03-31T00:00:00.000Z"
+  },
+  {
+    "id": "6",
+    "title": "Grădină decorativă cu pietriș",
+    "category": "Plantări",
+    "description": "Amenajare cu pietriș decorativ, lavandă, ierburi ornamentale și elemente de design peisagistic.",
+    "image": "/uploads/portfolio/plantari-1.jpg",
+    "createdAt": "2026-03-31T00:00:00.000Z"
+  },
+  {
+    "id": "7",
+    "title": "Plantare arbuști Photinia",
+    "category": "Plantări",
+    "description": "Rând de arbuști Photinia (red-tip) plantați cu mulci de scoarță, de-a lungul gazonului.",
+    "image": "/uploads/portfolio/plantari-2.jpg",
+    "createdAt": "2026-03-31T00:00:00.000Z"
+  },
+  {
+    "id": "8",
+    "title": "Arbust ornamental modelat",
+    "category": "Pomi & Arbuști",
+    "description": "Arbust decorativ modelat în formă sferică, pe pavaj decorativ cu inel de pietriș.",
+    "image": "/uploads/portfolio/pomi-1.jpg",
+    "createdAt": "2026-03-31T00:00:00.000Z"
+  },
+  {
+    "id": "9",
+    "title": "Livrare și plantare arbori",
+    "category": "Pomi & Arbuști",
+    "description": "Transport și plantare de conifere, arbori ornamentali și plante exotice.",
+    "image": "/uploads/portfolio/pomi-2.jpg",
+    "createdAt": "2026-03-31T00:00:00.000Z"
+  },
+  {
+    "id": "10",
+    "title": "Instalare sistem de irigații",
+    "category": "Irigații",
+    "description": "Montaj profesional de conducte de irigare cu picurare, de-a lungul casei.",
+    "image": "/uploads/portfolio/irigatii-1.jpg",
+    "createdAt": "2026-03-31T00:00:00.000Z"
+  },
+  {
+    "id": "11",
+    "title": "Echipament profesional ride-on",
+    "category": "Gazon",
+    "description": "Utilizăm mașini de tuns profesionale Viking/Stihl ride-on pentru suprafețe mari.",
+    "image": "/uploads/portfolio/echipament-1.jpg",
+    "createdAt": "2026-03-31T00:00:00.000Z"
+  },
+  {
+    "id": "12",
+    "title": "Echipament și logistică",
+    "category": "Gazon",
+    "description": "Flota noastră de echipamente profesionale, gata de lucru la orice locație.",
+    "image": "/uploads/portfolio/echipament-2.jpg",
+    "createdAt": "2026-03-31T00:00:00.000Z"
+  }
+]
