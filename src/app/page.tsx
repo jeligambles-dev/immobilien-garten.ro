@@ -265,7 +265,6 @@ export default function Home() {
                   "Ghiroda",
                   "Săcălaz",
                   "Sânmihaiu Român",
-                  "Lugoj",
                 ].map((loc) => (
                   <span
                     key={loc}
