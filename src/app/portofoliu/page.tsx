@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { X, ImageIcon, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ImageIcon, MapPin, ChevronLeft, ChevronRight, Maximize2, Minimize2 } from "lucide-react";
 import { SkeletonGrid } from "@/components/Skeleton";
 
 interface Lucrare {
@@ -31,6 +31,7 @@ export default function Portofoliu() {
   const [photoIdx, setPhotoIdx] = useState(0);
   const [lucrari, setLucrari] = useState<Lucrare[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fullscreen, setFullscreen] = useState(false);
 
   useEffect(() => {
     fetch("/api/admin/lucrari")
@@ -143,32 +144,54 @@ export default function Portofoliu() {
         )}
       </div>
 
+      {/* Fullscreen Image Viewer */}
+      {fullscreen && selected?.photos[photoIdx] && (
+        <div className="fixed inset-0 z-[60] bg-black flex items-center justify-center" onClick={() => setFullscreen(false)}>
+          <Image src={selected.photos[photoIdx]} alt={selected.title} fill className="object-contain" />
+          <button onClick={() => setFullscreen(false)} className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 text-white p-2.5 rounded-full cursor-pointer z-10" aria-label="Închide">
+            <Minimize2 className="h-6 w-6" />
+          </button>
+          {selected.photos.length > 1 && (
+            <>
+              <button onClick={(e) => { e.stopPropagation(); setPhotoIdx((p) => (p - 1 + selected.photos.length) % selected.photos.length); }} className="absolute left-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center cursor-pointer z-10"><ChevronLeft className="h-7 w-7" /></button>
+              <button onClick={(e) => { e.stopPropagation(); setPhotoIdx((p) => (p + 1) % selected.photos.length); }} className="absolute right-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center cursor-pointer z-10"><ChevronRight className="h-7 w-7" /></button>
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                {selected.photos.map((_, i) => (
+                  <button key={i} onClick={(e) => { e.stopPropagation(); setPhotoIdx(i); }} className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${i === photoIdx ? "w-8 bg-white" : "w-2.5 bg-white/40"}`} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
       {/* Lightbox */}
-      {selected && (
+      {selected && !fullscreen && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelected(null)}>
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             {/* Photo gallery */}
-            <div className="relative h-72 sm:h-80">
+            <div className="relative h-72 sm:h-80 cursor-pointer" onClick={() => setFullscreen(true)}>
               {selected.photos[photoIdx] ? (
                 <Image src={selected.photos[photoIdx]} alt={selected.title} fill className="object-cover rounded-t-2xl" />
               ) : (
                 <div className="h-full bg-gradient-to-br from-green-400 to-green-600 rounded-t-2xl" />
               )}
 
+              {/* Fullscreen button */}
+              <button onClick={(e) => { e.stopPropagation(); setFullscreen(true); }} className="absolute top-3 left-3 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full cursor-pointer z-10" aria-label="Ecran complet">
+                <Maximize2 className="h-4 w-4" />
+              </button>
+
               {/* Close */}
-              <button onClick={() => setSelected(null)} className="absolute top-3 right-3 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full cursor-pointer z-10" aria-label="Închide">
+              <button onClick={(e) => { e.stopPropagation(); setSelected(null); }} className="absolute top-3 right-3 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full cursor-pointer z-10" aria-label="Închide">
                 <X className="h-5 w-5" />
               </button>
 
               {/* Nav arrows */}
               {selected.photos.length > 1 && (
                 <>
-                  <button onClick={() => setPhotoIdx((p) => (p - 1 + selected.photos.length) % selected.photos.length)} className="absolute left-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center cursor-pointer z-10" aria-label="Foto anterioară">
-                    <ChevronLeft className="h-5 w-5" />
-                  </button>
-                  <button onClick={() => setPhotoIdx((p) => (p + 1) % selected.photos.length)} className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center cursor-pointer z-10" aria-label="Foto următoare">
-                    <ChevronRight className="h-5 w-5" />
-                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); setPhotoIdx((p) => (p - 1 + selected.photos.length) % selected.photos.length); }} className="absolute left-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center cursor-pointer z-10"><ChevronLeft className="h-5 w-5" /></button>
+                  <button onClick={(e) => { e.stopPropagation(); setPhotoIdx((p) => (p + 1) % selected.photos.length); }} className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center cursor-pointer z-10"><ChevronRight className="h-5 w-5" /></button>
                 </>
               )}
 
