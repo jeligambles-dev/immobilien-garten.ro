@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Chatbot from "@/components/Chatbot";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import CookieConsent from "@/components/CookieConsent";
-import BackToTop from "@/components/BackToTop";
+import SiteShell from "@/components/SiteShell";
 import StructuredData from "@/components/StructuredData";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 
@@ -99,13 +94,7 @@ export default function RootLayout({
       </head>
       <body className="bg-white text-slate-900 antialiased">
         <GoogleAnalytics />
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-        <Chatbot />
-        <WhatsAppButton />
-        <BackToTop />
-        <CookieConsent />
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   );
