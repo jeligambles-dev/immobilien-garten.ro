@@ -379,12 +379,29 @@ export default function AdminPage() {
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">Fotografii</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Fotografii <span className="text-slate-400 font-normal">(prima = copertă, trage pentru a reordona)</span></label>
                 <div className="flex flex-wrap gap-2">
                   {editingLucrare.photos.map((p, i) => (
-                    <div key={i} className="relative h-20 w-20 rounded-lg overflow-hidden border border-slate-200">
+                    <div
+                      key={p + i}
+                      draggable
+                      onDragStart={(e) => e.dataTransfer.setData("photoIdx", i.toString())}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        const from = parseInt(e.dataTransfer.getData("photoIdx"));
+                        if (isNaN(from) || from === i) return;
+                        const photos = [...editingLucrare.photos];
+                        const [moved] = photos.splice(from, 1);
+                        photos.splice(i, 0, moved);
+                        setEditingLucrare({ ...editingLucrare, photos });
+                      }}
+                      className={`relative h-20 w-20 rounded-lg overflow-hidden border-2 cursor-grab active:cursor-grabbing ${i === 0 ? "border-amber-400" : "border-slate-200"}`}
+                    >
                       <Image src={p} alt="" fill className="object-cover" />
+                      {i === 0 && <span className="absolute bottom-0 left-0 right-0 bg-amber-400 text-[9px] text-center font-bold text-amber-900 py-0.5">COPERTĂ</span>}
                       <button onClick={() => setEditingLucrare({ ...editingLucrare, photos: editingLucrare.photos.filter((_, j) => j !== i) })} className="absolute top-0.5 right-0.5 h-5 w-5 bg-red-500 text-white rounded-full flex items-center justify-center cursor-pointer text-xs">×</button>
+                      <span className="absolute top-0.5 left-0.5 bg-black/50 text-white text-[9px] font-bold px-1 rounded">{i + 1}</span>
                     </div>
                   ))}
                   <button onClick={async () => { const urls = await pickMultipleImages(); if (urls.length) setEditingLucrare({ ...editingLucrare, photos: [...editingLucrare.photos, ...urls] }); }} className="h-20 w-20 border-2 border-dashed border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400 hover:border-green-400 hover:text-green-500 cursor-pointer"><Upload className="h-5 w-5" /><span className="text-[10px]">Adaugă</span></button>
