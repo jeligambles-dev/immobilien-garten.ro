@@ -18,7 +18,17 @@ interface SiteContent { heroSlides: HeroSlide[]; beforeAfter: BeforeAfterItem[];
 interface Lucrare { id: string; title: string; description: string; photos: string[]; services: string[]; location: string; createdAt: string; }
 
 const categories = ["Gazon", "Pomi & Arbuști", "Gard Viu", "Plantări", "Irigații"];
-const allServices = ["Tuns Gazon", "Scarificare & Aerisire", "Toaletare Pomi & Arbuști", "Tuns Gard Viu", "Plantări Profesionale", "Montaj Gazon Rulou", "Gazon Artificial", "Sistem Irigații"];
+const allServices = [
+  "Tuns Gazon", "Scarificare & Aerisire", "Toaletare Pomi & Arbuști", "Tuns Gard Viu",
+  "Plantări Profesionale", "Montaj Gazon Rulou", "Gazon Artificial", "Sistem Irigații",
+  "Defrișare Teren", "Curățare Teren", "Nivelare Teren", "Mulcire",
+  "Amenajare Peisagistică", "Design Grădină", "Borduri & Pavaje",
+  "Scoarță Decorativă", "Pietriș Decorativ", "Gazon Semănat",
+  "Fertilizare", "Tratamente Fitosanitare", "Combatere Dăunători",
+  "Tăiere Copaci", "Doborâre Arbori", "Dezrădăcinare Cioate",
+  "Drenaj Grădină", "Iluminat Exterior", "Garduri & Pergole",
+  "Întreținere Lunară", "Curățenie Sezonieră", "Pregătire Iarnă",
+];
 
 type Tab = "lucrari" | "portfolio" | "images" | "hero" | "beforeafter" | "prices" | "areas";
 
