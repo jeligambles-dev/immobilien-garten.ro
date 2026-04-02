@@ -79,6 +79,19 @@ export default function AdminPage() {
     });
   }
 
+  function pickMultipleImages(): Promise<string[]> {
+    return new Promise((resolve) => {
+      const input = document.createElement("input"); input.type = "file"; input.accept = "image/*"; input.multiple = true;
+      input.onchange = async (e) => {
+        const files = Array.from((e.target as HTMLInputElement).files || []);
+        const urls: string[] = [];
+        for (const f of files) { const url = await uploadImage(f); if (url) urls.push(url); }
+        resolve(urls);
+      };
+      input.click();
+    });
+  }
+
   useEffect(() => { fetch("/api/admin/images").then((r) => { if (r.ok) { setAuthed(true); loadData(); } }); }, []);
 
   // ---- LOGIN ----
@@ -364,7 +377,7 @@ export default function AdminPage() {
                       <button onClick={() => setEditingLucrare({ ...editingLucrare, photos: editingLucrare.photos.filter((_, j) => j !== i) })} className="absolute top-0.5 right-0.5 h-5 w-5 bg-red-500 text-white rounded-full flex items-center justify-center cursor-pointer text-xs">×</button>
                     </div>
                   ))}
-                  <button onClick={async () => { const url = await pickImage(); if (url) setEditingLucrare({ ...editingLucrare, photos: [...editingLucrare.photos, url] }); }} className="h-20 w-20 border-2 border-dashed border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400 hover:border-green-400 hover:text-green-500 cursor-pointer"><Upload className="h-5 w-5" /><span className="text-[10px]">Adaugă</span></button>
+                  <button onClick={async () => { const urls = await pickMultipleImages(); if (urls.length) setEditingLucrare({ ...editingLucrare, photos: [...editingLucrare.photos, ...urls] }); }} className="h-20 w-20 border-2 border-dashed border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400 hover:border-green-400 hover:text-green-500 cursor-pointer"><Upload className="h-5 w-5" /><span className="text-[10px]">Adaugă</span></button>
                 </div>
               </div>
               <div><label className="block text-sm font-medium text-slate-700 mb-1.5">Titlu</label><input value={editingLucrare.title} onChange={(e) => setEditingLucrare({ ...editingLucrare, title: e.target.value })} className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Ex: Amenajare curte" /></div>
