@@ -1,15 +1,46 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, Mail, MapPin, Send, Clock, CheckCircle } from "lucide-react";
+import { Phone, Mail, MapPin, Send, Clock, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 
 export default function Contact() {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 4000);
+    setStatus("loading");
+    setErrorMsg("");
+
+    const form = e.currentTarget;
+    const data = {
+      name: (form.elements.namedItem("name") as HTMLInputElement).value,
+      phone: (form.elements.namedItem("phone") as HTMLInputElement).value,
+      email: (form.elements.namedItem("email") as HTMLInputElement).value,
+      service: (form.elements.namedItem("service") as HTMLSelectElement).value,
+      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
+    };
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        setStatus("success");
+        form.reset();
+        setTimeout(() => setStatus("idle"), 5000);
+      } else {
+        const err = await res.json();
+        setErrorMsg(err.error || "Eroare la trimitere.");
+        setStatus("error");
+      }
+    } catch {
+      setErrorMsg("Eroare de conexiune. Încercați din nou sau sunați-ne direct.");
+      setStatus("error");
+    }
   }
 
   return (
@@ -34,55 +65,28 @@ export default function Contact() {
               </h3>
               <ul className="space-y-4">
                 <li>
-                  <a
-                    href="tel:0747469681"
-                    className="flex items-center gap-3 text-slate-700 hover:text-green-600 transition-colors duration-200 cursor-pointer"
-                  >
-                    <div className="h-10 w-10 rounded-xl bg-green-600 text-white flex items-center justify-center shrink-0">
-                      <Phone className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-slate-500">Telefon</p>
-                      <p className="font-semibold">0747 469 681</p>
-                    </div>
+                  <a href="tel:0747469681" className="flex items-center gap-3 text-slate-700 hover:text-green-600 transition-colors duration-200 cursor-pointer">
+                    <div className="h-10 w-10 rounded-xl bg-green-600 text-white flex items-center justify-center shrink-0"><Phone className="h-5 w-5" /></div>
+                    <div><p className="text-xs text-slate-500">Telefon</p><p className="font-semibold">0747 469 681</p></div>
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="mailto:contact@immobilien-garten.ro"
-                    className="flex items-center gap-3 text-slate-700 hover:text-green-600 transition-colors duration-200 cursor-pointer"
-                  >
-                    <div className="h-10 w-10 rounded-xl bg-green-600 text-white flex items-center justify-center shrink-0">
-                      <Mail className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-slate-500">Email</p>
-                      <p className="font-semibold">contact@immobilien-garten.ro</p>
-                    </div>
+                  <a href="mailto:contact@immobilien-garten.ro" className="flex items-center gap-3 text-slate-700 hover:text-green-600 transition-colors duration-200 cursor-pointer">
+                    <div className="h-10 w-10 rounded-xl bg-green-600 text-white flex items-center justify-center shrink-0"><Mail className="h-5 w-5" /></div>
+                    <div><p className="text-xs text-slate-500">Email</p><p className="font-semibold">contact@immobilien-garten.ro</p></div>
                   </a>
                 </li>
                 <li className="flex items-center gap-3 text-slate-700">
-                  <div className="h-10 w-10 rounded-xl bg-green-600 text-white flex items-center justify-center shrink-0">
-                    <MapPin className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500">Locație</p>
-                    <p className="font-semibold">Timișoara, România</p>
-                  </div>
+                  <div className="h-10 w-10 rounded-xl bg-green-600 text-white flex items-center justify-center shrink-0"><MapPin className="h-5 w-5" /></div>
+                  <div><p className="text-xs text-slate-500">Locație</p><p className="font-semibold">Timișoara, România</p></div>
                 </li>
                 <li className="flex items-center gap-3 text-slate-700">
-                  <div className="h-10 w-10 rounded-xl bg-green-600 text-white flex items-center justify-center shrink-0">
-                    <Clock className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500">Program</p>
-                    <p className="font-semibold">Luni - Sâmbătă: 07:00 - 19:00</p>
-                  </div>
+                  <div className="h-10 w-10 rounded-xl bg-green-600 text-white flex items-center justify-center shrink-0"><Clock className="h-5 w-5" /></div>
+                  <div><p className="text-xs text-slate-500">Program</p><p className="font-semibold">Luni - Sâmbătă: 07:00 - 19:00</p></div>
                 </li>
               </ul>
             </div>
 
-            {/* Map */}
             <div className="rounded-2xl overflow-hidden border border-green-200 h-48">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d89189.53152579967!2d21.17291655!3d45.74887865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47455d84610db46d%3A0xd781b1e9187965c6!2sTimi%C8%99oara!5e0!3m2!1sro!2sro!4v1711800000000!5m2!1sro!2sro"
@@ -105,65 +109,21 @@ export default function Contact() {
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-slate-700 mb-1.5"
-                  >
-                    Nume complet *
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    required
-                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow duration-200"
-                    placeholder="Ion Popescu"
-                  />
+                  <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1.5">Nume complet *</label>
+                  <input id="name" name="name" type="text" required className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Ion Popescu" />
                 </div>
                 <div>
-                  <label
-                    htmlFor="phone"
-                    className="block text-sm font-medium text-slate-700 mb-1.5"
-                  >
-                    Telefon *
-                  </label>
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    required
-                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow duration-200"
-                    placeholder="07XX XXX XXX"
-                  />
+                  <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-1.5">Telefon *</label>
+                  <input id="phone" name="phone" type="tel" required className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="07XX XXX XXX" />
                 </div>
               </div>
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-slate-700 mb-1.5"
-                >
-                  Email
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow duration-200"
-                  placeholder="email@exemplu.ro"
-                />
+                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
+                <input id="email" name="email" type="email" className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="email@exemplu.ro" />
               </div>
               <div>
-                <label
-                  htmlFor="service"
-                  className="block text-sm font-medium text-slate-700 mb-1.5"
-                >
-                  Serviciu dorit
-                </label>
-                <select
-                  id="service"
-                  name="service"
-                  className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow duration-200"
-                >
+                <label htmlFor="service" className="block text-sm font-medium text-slate-700 mb-1.5">Serviciu dorit</label>
+                <select id="service" name="service" className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                   <option value="">Selectează un serviciu</option>
                   <option>Tuns gazon</option>
                   <option>Scarificare & aerisire</option>
@@ -176,29 +136,38 @@ export default function Contact() {
                 </select>
               </div>
               <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium text-slate-700 mb-1.5"
-                >
-                  Mesaj *
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  required
-                  rows={4}
-                  className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow duration-200 resize-none"
-                  placeholder="Descrie ce ai nevoie..."
-                />
+                <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-1.5">Mesaj *</label>
+                <textarea id="message" name="message" required rows={4} className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none" placeholder="Descrie ce ai nevoie..." />
               </div>
+
+              {status === "error" && (
+                <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  {errorMsg}
+                </div>
+              )}
+
+              {status === "success" && (
+                <div className="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl">
+                  <CheckCircle className="h-4 w-4 shrink-0" />
+                  Mesajul a fost trimis cu succes! Te vom contacta în curând.
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition-colors duration-200 cursor-pointer"
+                disabled={status === "loading"}
+                className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-3 rounded-xl transition-colors duration-200 cursor-pointer"
               >
-                {submitted ? (
+                {status === "loading" ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    Se trimite...
+                  </>
+                ) : status === "success" ? (
                   <>
                     <CheckCircle className="h-5 w-5" />
-                    Mesaj trimis cu succes!
+                    Trimis!
                   </>
                 ) : (
                   <>
