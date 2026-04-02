@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: [],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "immobilien-garten.ro",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
