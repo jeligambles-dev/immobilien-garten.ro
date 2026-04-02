@@ -2,82 +2,85 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { X, ImageIcon } from "lucide-react";
+import { X, ImageIcon, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 import { SkeletonGrid } from "@/components/Skeleton";
 
-interface Project {
+interface Lucrare {
   id: string;
   title: string;
-  category: string;
   description: string;
-  image: string | null;
+  photos: string[];
+  services: string[];
+  location: string;
   createdAt: string;
 }
 
-const categories = [
+const serviceFilters = [
   "Toate",
-  "Gazon",
-  "Pomi & Arbuști",
-  "Gard Viu",
-  "Plantări",
-  "Irigații",
-];
-
-const placeholderColors = [
-  "from-green-400 to-green-600",
-  "from-emerald-400 to-emerald-600",
-  "from-teal-400 to-teal-600",
-  "from-cyan-400 to-cyan-600",
-  "from-lime-400 to-lime-600",
-  "from-green-500 to-emerald-600",
+  "Tuns Gazon",
+  "Toaletare Pomi & Arbuști",
+  "Tuns Gard Viu",
+  "Plantări Profesionale",
+  "Montaj Gazon Rulou",
+  "Sistem Irigații",
 ];
 
 export default function Portofoliu() {
   const [active, setActive] = useState("Toate");
-  const [selected, setSelected] = useState<Project | null>(null);
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [selected, setSelected] = useState<Lucrare | null>(null);
+  const [photoIdx, setPhotoIdx] = useState(0);
+  const [lucrari, setLucrari] = useState<Lucrare[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/admin/portfolio")
+    fetch("/api/admin/lucrari")
       .then((r) => r.json())
-      .then((data) => {
-        setProjects(data);
-        setLoading(false);
-      });
+      .then((data) => { setLucrari(data); setLoading(false); })
+      .catch(() => setLoading(false));
   }, []);
 
-  const filtered =
-    active === "Toate"
-      ? projects
-      : projects.filter((p) => p.category === active);
+  // Scroll to lucrare if hash exists
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash) {
+      const el = document.querySelector(window.location.hash);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [lucrari]);
+
+  const filtered = active === "Toate"
+    ? lucrari
+    : lucrari.filter((l) => l.services.some((s) => s.includes(active.replace("Toate", ""))));
+
+  function openLucrare(l: Lucrare) {
+    setSelected(l);
+    setPhotoIdx(0);
+  }
 
   return (
     <section className="pt-24 pb-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
           <h1 className="font-heading font-bold text-slate-900 text-3xl sm:text-4xl mb-4">
-            Portofoliu
+            Portofoliu — Lucrările Noastre
           </h1>
           <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-            Fiecare proiect este o dovadă a pasiunii și profesionalismului
-            nostru. Iată câteva dintre lucrările realizate.
+            Fiecare proiect este o dovadă a pasiunii și profesionalismului nostru.
           </p>
         </div>
 
         {/* Filters */}
         <div className="flex flex-wrap justify-center gap-2 mb-10">
-          {categories.map((cat) => (
+          {serviceFilters.map((f) => (
             <button
-              key={cat}
-              onClick={() => setActive(cat)}
+              key={f}
+              onClick={() => setActive(f)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 cursor-pointer ${
-                active === cat
+                active === f
                   ? "bg-green-600 text-white"
                   : "bg-green-50 text-green-700 hover:bg-green-100"
               }`}
             >
-              {cat}
+              {f}
             </button>
           ))}
         </div>
@@ -88,44 +91,51 @@ export default function Portofoliu() {
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">
             <ImageIcon className="h-12 w-12 text-slate-300 mx-auto mb-3" />
-            <p className="text-slate-500">
-              Nu sunt proiecte în această categorie.
-            </p>
+            <p className="text-slate-500">Nu sunt lucrări în această categorie.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((project, idx) => (
+            {filtered.map((l) => (
               <button
-                key={project.id}
-                onClick={() => setSelected(project)}
+                key={l.id}
+                id={`lucrare-${l.id}`}
+                onClick={() => openLucrare(l)}
                 className="group rounded-2xl overflow-hidden border border-green-100 hover:border-green-300 hover:shadow-xl hover:shadow-green-100/50 transition-all duration-300 cursor-pointer text-left bg-white"
               >
-                <div className="h-52 relative">
-                  {project.image ? (
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                {/* Cover photo */}
+                <div className="h-52 relative overflow-hidden">
+                  {l.photos[0] ? (
+                    <Image src={l.photos[0]} alt={l.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
                   ) : (
-                    <div
-                      className={`h-full bg-gradient-to-br ${placeholderColors[idx % placeholderColors.length]} flex items-center justify-center`}
-                    >
-                      <span className="text-white/80 font-heading font-bold text-5xl group-hover:scale-110 transition-transform duration-300">
-                        {idx + 1}
-                      </span>
+                    <div className="h-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                      <ImageIcon className="h-12 w-12 text-white/40" />
+                    </div>
+                  )}
+                  {l.photos.length > 1 && (
+                    <div className="absolute top-2 right-2 bg-black/50 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+                      {l.photos.length} foto
                     </div>
                   )}
                 </div>
+
+                {/* Info */}
                 <div className="p-5">
-                  <span className="text-xs font-medium text-green-600 bg-green-50 px-2.5 py-1 rounded-full">
-                    {project.category}
-                  </span>
-                  <h3 className="font-heading font-semibold text-slate-900 mt-3 mb-1">
-                    {project.title}
+                  <h3 className="font-heading font-semibold text-slate-900 mb-2">
+                    {l.title}
                   </h3>
-                  <p className="text-slate-500 text-sm">{project.description}</p>
+                  <p className="text-slate-500 text-sm line-clamp-2 mb-3">
+                    {l.description}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {l.services.map((s) => (
+                      <span key={s} className="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                  <span className="flex items-center gap-1 text-xs text-slate-400">
+                    <MapPin className="h-3 w-3" /> {l.location}
+                  </span>
                 </div>
               </button>
             ))}
@@ -135,45 +145,69 @@ export default function Portofoliu() {
 
       {/* Lightbox */}
       {selected && (
-        <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setSelected(null)}
-        >
-          <div
-            className="bg-white rounded-2xl max-w-lg w-full overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="h-72 relative">
-              {selected.image ? (
-                <Image
-                  src={selected.image}
-                  alt={selected.title}
-                  fill
-                  className="object-cover"
-                />
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelected(null)}>
+          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            {/* Photo gallery */}
+            <div className="relative h-72 sm:h-80">
+              {selected.photos[photoIdx] ? (
+                <Image src={selected.photos[photoIdx]} alt={selected.title} fill className="object-cover rounded-t-2xl" />
               ) : (
-                <div className="h-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
-                  <ImageIcon className="h-16 w-16 text-white/40" />
-                </div>
+                <div className="h-full bg-gradient-to-br from-green-400 to-green-600 rounded-t-2xl" />
               )}
-              <button
-                onClick={() => setSelected(null)}
-                className="absolute top-3 right-3 bg-white/20 hover:bg-white/40 text-white p-2 rounded-full transition-colors duration-200 cursor-pointer"
-                aria-label="Închide"
-              >
+
+              {/* Close */}
+              <button onClick={() => setSelected(null)} className="absolute top-3 right-3 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full cursor-pointer z-10" aria-label="Închide">
                 <X className="h-5 w-5" />
               </button>
+
+              {/* Nav arrows */}
+              {selected.photos.length > 1 && (
+                <>
+                  <button onClick={() => setPhotoIdx((p) => (p - 1 + selected.photos.length) % selected.photos.length)} className="absolute left-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center cursor-pointer z-10" aria-label="Foto anterioară">
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  <button onClick={() => setPhotoIdx((p) => (p + 1) % selected.photos.length)} className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center cursor-pointer z-10" aria-label="Foto următoare">
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </>
+              )}
+
+              {/* Photo counter */}
+              {selected.photos.length > 1 && (
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs font-semibold px-3 py-1 rounded-full z-10">
+                  {photoIdx + 1} / {selected.photos.length}
+                </div>
+              )}
             </div>
+
+            {/* Thumbnails */}
+            {selected.photos.length > 1 && (
+              <div className="flex gap-2 px-6 pt-4 overflow-x-auto">
+                {selected.photos.map((p, i) => (
+                  <button key={i} onClick={() => setPhotoIdx(i)} className={`h-16 w-16 rounded-lg overflow-hidden shrink-0 border-2 cursor-pointer ${i === photoIdx ? "border-green-500" : "border-transparent opacity-60 hover:opacity-100"}`}>
+                    <Image src={p} alt={`Foto ${i + 1}`} width={64} height={64} className="h-full w-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Details */}
             <div className="p-6">
-              <span className="text-xs font-medium text-green-600 bg-green-50 px-2.5 py-1 rounded-full">
-                {selected.category}
+              <h3 className="font-heading font-bold text-slate-900 text-xl mb-2">{selected.title}</h3>
+              <span className="flex items-center gap-1 text-sm text-slate-400 mb-3">
+                <MapPin className="h-4 w-4" /> {selected.location}
               </span>
-              <h3 className="font-heading font-bold text-slate-900 text-xl mt-3 mb-2">
-                {selected.title}
-              </h3>
-              <p className="text-slate-600 leading-relaxed">
-                {selected.description}
-              </p>
+              <p className="text-slate-600 leading-relaxed mb-4">{selected.description}</p>
+              <div>
+                <p className="text-xs font-semibold text-slate-500 mb-2">Servicii efectuate:</p>
+                <div className="flex flex-wrap gap-2">
+                  {selected.services.map((s) => (
+                    <span key={s} className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full font-medium">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>

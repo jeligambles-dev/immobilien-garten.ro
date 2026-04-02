@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1",
+    "title": "Amenajare completă curte rezidențială",
+    "description": "Proiect complet de amenajare: gazon rulou, plantări ornamentale, gard viu și sistem de irigații pentru o curte de 300mp.",
+    "photos": ["/uploads/portfolio/gazon-1.jpg", "/uploads/portfolio/plantari-1.jpg", "/uploads/portfolio/gard-viu-2.jpg"],
+    "services": ["Montaj Gazon Rulou", "Plantări Profesionale", "Tuns Gard Viu", "Sistem Irigații"],
+    "location": "Timișoara",
+    "createdAt": "2026-03-15T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "title": "Întreținere gazon și toaletare pomi",
+    "description": "Tuns gazon cu efect de dungi profesionale și toaletare completă a pomilor ornamentali dintr-o curte privată.",
+    "photos": ["/uploads/portfolio/gazon-2.jpg", "/uploads/portfolio/pomi-1.jpg", "/uploads/portfolio/echipament-1.jpg"],
+    "services": ["Tuns Gazon", "Toaletare Pomi & Arbuști"],
+    "location": "Dumbrăvița",
+    "createdAt": "2026-03-20T00:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "title": "Grădină decorativă cu pietriș și lavandă",
+    "description": "Amenajare grădină modernă cu pietriș decorativ, lavandă, ierburi ornamentale și elemente de design peisagistic.",
+    "photos": ["/uploads/portfolio/plantari-1.jpg", "/uploads/portfolio/plantari-2.jpg"],
+    "services": ["Plantări Profesionale"],
+    "location": "Giroc",
+    "createdAt": "2026-03-25T00:00:00.000Z"
+  }
+]

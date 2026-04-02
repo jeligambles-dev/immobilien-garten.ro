@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import HeroCarousel from "@/components/HeroCarousel";
 import BeforeAfter from "@/components/BeforeAfter";
+import LucrariCarousel from "@/components/LucrariCarousel";
 
 const services = [
   {
@@ -147,6 +148,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Lucrări */}
+      <LucrariCarousel />
 
       {/* Before/After */}
       <BeforeAfter />

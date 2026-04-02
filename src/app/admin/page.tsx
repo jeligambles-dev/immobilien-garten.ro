@@ -15,8 +15,9 @@ import {
   Pencil,
   SlidersHorizontal,
   DollarSign,
-  MessageCircle,
   Images,
+  Hammer,
+  MapPin,
 } from "lucide-react";
 
 interface PortfolioItem {
@@ -63,16 +64,29 @@ interface SiteContent {
   services: ServicePrice[];
 }
 
+interface Lucrare {
+  id: string;
+  title: string;
+  description: string;
+  photos: string[];
+  services: string[];
+  location: string;
+  createdAt: string;
+}
+
 const categories = ["Gazon", "Pomi & Arbuști", "Gard Viu", "Plantări", "Irigații"];
+const allServices = ["Tuns Gazon", "Scarificare & Aerisire", "Toaletare Pomi & Arbuști", "Tuns Gard Viu", "Plantări Profesionale", "Montaj Gazon Rulou", "Gazon Artificial", "Sistem Irigații"];
 
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [tab, setTab] = useState<"portfolio" | "images" | "hero" | "beforeafter" | "prices">("portfolio");
+  const [tab, setTab] = useState<"lucrari" | "portfolio" | "images" | "hero" | "beforeafter" | "prices">("lucrari");
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [images, setImages] = useState<UploadedImage[]>([]);
   const [content, setContent] = useState<SiteContent | null>(null);
+  const [lucrari, setLucrari] = useState<Lucrare[]>([]);
+  const [editingLucrare, setEditingLucrare] = useState<Lucrare | null>(null);
   const [editing, setEditing] = useState<PortfolioItem | null>(null);
   const [uploading, setUploading] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -100,14 +114,36 @@ export default function AdminPage() {
   }
 
   async function loadData() {
-    const [portfolioRes, imagesRes, contentRes] = await Promise.all([
+    const [portfolioRes, imagesRes, contentRes, lucrariRes] = await Promise.all([
       fetch("/api/admin/portfolio"),
       fetch("/api/admin/images"),
       fetch("/api/admin/content"),
+      fetch("/api/admin/lucrari"),
     ]);
     if (portfolioRes.ok) setItems(await portfolioRes.json());
     if (imagesRes.ok) setImages(await imagesRes.json());
     if (contentRes.ok) setContent(await contentRes.json());
+    if (lucrariRes.ok) setLucrari(await lucrariRes.json());
+  }
+
+  async function saveLucrare(l: Lucrare) {
+    const exists = lucrari.find((x) => x.id === l.id);
+    await fetch("/api/admin/lucrari", {
+      method: exists ? "PUT" : "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(l),
+    });
+    await loadData();
+    setEditingLucrare(null);
+  }
+
+  async function deleteLucrare(id: string) {
+    await fetch("/api/admin/lucrari", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    setLucrari((prev) => prev.filter((l) => l.id !== id));
   }
 
   async function uploadImage(file: File): Promise<string | null> {
@@ -219,6 +255,7 @@ export default function AdminPage() {
   }
 
   const tabs = [
+    { id: "lucrari" as const, label: "Lucrări", icon: Hammer },
     { id: "portfolio" as const, label: "Portofoliu", icon: FolderOpen },
     { id: "images" as const, label: "Imagini", icon: ImageIcon },
     { id: "hero" as const, label: "Carousel", icon: SlidersHorizontal },
@@ -255,6 +292,60 @@ export default function AdminPage() {
             </button>
           ))}
         </div>
+
+        {/* LUCRĂRI TAB */}
+        {tab === "lucrari" && (
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-heading font-semibold text-slate-900">Lucrări Realizate</h2>
+              <button
+                onClick={() => setEditingLucrare({ id: "new-" + Date.now(), title: "", description: "", photos: [], services: [], location: "Timișoara", createdAt: new Date().toISOString() })}
+                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-4 py-2 rounded-lg cursor-pointer"
+              >
+                <Plus className="h-4 w-4" /> Adaugă Lucrare
+              </button>
+            </div>
+            {lucrari.length === 0 ? (
+              <div className="bg-white rounded-xl border border-dashed border-slate-300 p-12 text-center">
+                <Hammer className="h-12 w-12 text-slate-300 mx-auto mb-3" />
+                <p className="text-slate-500 text-sm">Nicio lucrare adăugată. Adaugă prima ta lucrare!</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {lucrari.map((l) => (
+                  <div key={l.id} className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col sm:flex-row gap-4">
+                    <div className="flex gap-2 shrink-0 overflow-x-auto">
+                      {l.photos.slice(0, 3).map((p, i) => (
+                        <div key={i} className="h-24 w-24 rounded-lg overflow-hidden relative shrink-0">
+                          <Image src={p} alt="" fill className="object-cover" />
+                        </div>
+                      ))}
+                      {l.photos.length === 0 && (
+                        <div className="h-24 w-24 rounded-lg bg-slate-100 flex items-center justify-center"><ImageIcon className="h-8 w-8 text-slate-300" /></div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-slate-900 text-sm">{l.title || "Fără titlu"}</h3>
+                      <p className="text-slate-500 text-xs mt-1 line-clamp-2">{l.description}</p>
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {l.services.map((s) => (
+                          <span key={s} className="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full">{s}</span>
+                        ))}
+                      </div>
+                      <div className="flex items-center gap-1 mt-2 text-xs text-slate-400">
+                        <MapPin className="h-3 w-3" /> {l.location} · {l.photos.length} foto
+                      </div>
+                    </div>
+                    <div className="flex sm:flex-col gap-2 shrink-0">
+                      <button onClick={() => setEditingLucrare({ ...l })} className="flex items-center gap-1 text-xs text-slate-500 hover:text-green-600 cursor-pointer"><Pencil className="h-3 w-3" /> Editează</button>
+                      <button onClick={() => { if (confirm("Ștergi această lucrare?")) deleteLucrare(l.id); }} className="flex items-center gap-1 text-xs text-slate-500 hover:text-red-500 cursor-pointer"><Trash2 className="h-3 w-3" /> Șterge</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* PORTFOLIO TAB */}
         {tab === "portfolio" && (
@@ -436,6 +527,75 @@ export default function AdminPage() {
           </div>
         )}
       </div>
+
+      {/* Edit Lucrare Modal */}
+      {editingLucrare && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+              <h3 className="font-heading font-semibold text-slate-900">{editingLucrare.id.startsWith("new-") ? "Lucrare Nouă" : "Editează Lucrare"}</h3>
+              <button onClick={() => setEditingLucrare(null)} className="p-1.5 text-slate-400 hover:text-slate-600 cursor-pointer"><X className="h-5 w-5" /></button>
+            </div>
+            <div className="p-6 space-y-4">
+              {/* Photos */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Fotografii</label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {editingLucrare.photos.map((p, i) => (
+                    <div key={i} className="relative h-20 w-20 rounded-lg overflow-hidden border border-slate-200">
+                      <Image src={p} alt="" fill className="object-cover" />
+                      <button onClick={() => { const photos = editingLucrare.photos.filter((_, j) => j !== i); setEditingLucrare({ ...editingLucrare, photos }); }} className="absolute top-0.5 right-0.5 h-5 w-5 bg-red-500 text-white rounded-full flex items-center justify-center cursor-pointer text-xs">×</button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={async () => { const url = await pickImage(); if (url) setEditingLucrare({ ...editingLucrare, photos: [...editingLucrare.photos, url] }); }}
+                    className="h-20 w-20 border-2 border-dashed border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400 hover:border-green-400 hover:text-green-500 cursor-pointer"
+                  >
+                    <Upload className="h-5 w-5" />
+                    <span className="text-[10px] mt-0.5">Adaugă</span>
+                  </button>
+                </div>
+              </div>
+              {/* Title */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Titlu</label>
+                <input value={editingLucrare.title} onChange={(e) => setEditingLucrare({ ...editingLucrare, title: e.target.value })} className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Ex: Amenajare completă curte" />
+              </div>
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Descriere</label>
+                <textarea value={editingLucrare.description} onChange={(e) => setEditingLucrare({ ...editingLucrare, description: e.target.value })} rows={3} className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none" placeholder="Descriere lucrare..." />
+              </div>
+              {/* Services checkboxes */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Servicii efectuate</label>
+                <div className="flex flex-wrap gap-2">
+                  {allServices.map((s) => {
+                    const checked = editingLucrare.services.includes(s);
+                    return (
+                      <button key={s} type="button" onClick={() => {
+                        const services = checked ? editingLucrare.services.filter((x) => x !== s) : [...editingLucrare.services, s];
+                        setEditingLucrare({ ...editingLucrare, services });
+                      }} className={`text-xs px-3 py-1.5 rounded-full border cursor-pointer transition-colors duration-200 ${checked ? "bg-green-600 text-white border-green-600" : "bg-white text-slate-600 border-slate-200 hover:border-green-400"}`}>
+                        {s}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              {/* Location */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Locație</label>
+                <input value={editingLucrare.location} onChange={(e) => setEditingLucrare({ ...editingLucrare, location: e.target.value })} className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Timișoara" />
+              </div>
+            </div>
+            <div className="flex gap-3 px-6 py-4 border-t border-slate-100">
+              <button onClick={() => setEditingLucrare(null)} className="flex-1 py-2.5 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer">Anulează</button>
+              <button onClick={() => saveLucrare(editingLucrare)} className="flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-white bg-green-600 hover:bg-green-700 rounded-xl cursor-pointer"><Save className="h-4 w-4" /> Salvează</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Edit Portfolio Modal */}
       {editing && (
