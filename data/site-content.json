@@ -19,5 +19,6 @@
     { "id": "6", "title": "Montaj Gazon Rulou", "price": "De la 20 lei/mp", "priceMin": 20, "priceMax": 35, "unit": "mp" },
     { "id": "7", "title": "Gazon Artificial", "price": "De la 40 lei/mp", "priceMin": 40, "priceMax": 80, "unit": "mp" },
     { "id": "8", "title": "Sistem Irigații", "price": "De la 8 lei/mp", "priceMin": 8, "priceMax": 20, "unit": "mp" }
-  ]
+  ],
+  "coveringAreas": ["Timișoara", "Dumbrăvița", "Giroc", "Moșnița", "Ghiroda", "Săcălaz", "Sânmihaiu Român"]
 }
