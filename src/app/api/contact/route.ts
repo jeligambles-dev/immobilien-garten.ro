@@ -14,9 +14,10 @@ export async function POST(req: NextRequest) {
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
     const toEmail = process.env.CONTACT_EMAIL || "contact@immobilien-garten.ro";
+    const fromEmail = process.env.RESEND_FROM || "Immobilien Garten <onboarding@resend.dev>";
 
-    await resend.emails.send({
-      from: "Immobilien Garten Service <noreply@immobilien-garten.ro>",
+    const result = await resend.emails.send({
+      from: fromEmail,
       to: toEmail,
       replyTo: email || undefined,
       subject: `Cerere nouă: ${service || "Contact"} — ${name}`,
@@ -32,10 +33,16 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    return NextResponse.json({ success: true });
-  } catch {
+    if (result.error) {
+      console.error("Resend error:", result.error);
+      return NextResponse.json({ error: result.error.message || "Eroare la trimitere." }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true, id: result.data?.id });
+  } catch (err) {
+    console.error("Contact form error:", err);
     return NextResponse.json(
-      { error: "Eroare la trimitere. Încercați din nou sau sunați-ne direct." },
+      { error: err instanceof Error ? err.message : "Eroare la trimitere." },
       { status: 500 }
     );
   }
