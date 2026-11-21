@@ -1,3 +1,5 @@
+import { SERVICES } from "@/lib/services";
+
 export default function StructuredData() {
   const schema = {
     "@context": "https://schema.org",
@@ -49,15 +51,10 @@ export default function StructuredData() {
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Servicii Grădinărit",
-      itemListElement: [
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Tuns Gazon" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Scarificare & Aerisire" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Toaletare Pomi & Arbuști" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Tuns Gard Viu" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Plantări Profesionale" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Montaj Gazon Natural & Artificial" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Sisteme de Irigații" } },
-      ],
+      itemListElement: SERVICES.map((sv) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: sv.title, url: `https://immobilien-garten.ro/servicii/${sv.slug}` },
+      })),
     },
   };
 

@@ -1,24 +1,32 @@
 import type { MetadataRoute } from "next";
+import { SERVICES } from "@/lib/services";
+
+const BLOG = [
+  "cum-sa-intretii-gazonul-vara",
+  "ghid-sistem-irigatii",
+  "cand-sa-plantezi-gazon-rulou",
+  "toaletarea-pomilor-ghid-complet",
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://immobilien-garten.ro";
-
+  const base = "https://immobilien-garten.ro";
+  const now = new Date();
+  const page = (path: string, priority: number, changeFrequency: "weekly" | "monthly") => ({
+    url: `${base}${path}`,
+    lastModified: now,
+    changeFrequency,
+    priority,
+  });
   return [
-    { url: baseUrl, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
-    { url: `${baseUrl}/portofoliu`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/produse`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/servicii/tuns-gazon`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/servicii/scarificare`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/servicii/toaletare-pomi`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/servicii/gard-viu`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/servicii/plantari`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/servicii/gazon-rulou`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/servicii/irigatii`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/blog/cum-sa-intretii-gazonul-vara`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${baseUrl}/blog/ghid-sistem-irigatii`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${baseUrl}/blog/cand-sa-plantezi-gazon-rulou`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${baseUrl}/blog/toaletarea-pomilor-ghid-complet`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    page("", 1, "weekly"),
+    page("/servicii", 0.9, "weekly"),
+    page("/portofoliu", 0.9, "weekly"),
+    page("/produse", 0.8, "weekly"),
+    page("/despre", 0.7, "monthly"),
+    page("/intrebari-frecvente", 0.7, "monthly"),
+    page("/contact", 0.8, "monthly"),
+    page("/blog", 0.8, "weekly"),
+    ...SERVICES.map((s) => page(`/servicii/${s.slug}`, 0.7, "monthly")),
+    ...BLOG.map((b) => page(`/blog/${b}`, 0.6, "monthly")),
   ];
 }
