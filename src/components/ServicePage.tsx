@@ -5,7 +5,7 @@ import { SERVICES, serviceBySlug, type ServiceSlug } from "@/lib/services";
 import { SERVICE_CONTENT } from "@/lib/serviceContent";
 import Reveal from "@/components/ui/Reveal";
 import TiltCard from "@/components/ui/TiltCard";
-import LivePrice from "@/components/services/LivePrice";
+import LivePrice, { LivePriceNote } from "@/components/services/LivePrice";
 import LoopVideo from "@/components/services/LoopVideo";
 
 export function serviceMetadata(slug: ServiceSlug): Metadata {
@@ -47,7 +47,7 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
                 Cere ofertă <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-            <p className="mt-4 text-sm text-ink/55">{c.priceNote}</p>
+            <LivePriceNote slug={slug} qualifier={c.priceNote} className="mt-4 text-sm text-ink/55" />
           </div>
         </div>
       </section>

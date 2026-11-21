@@ -49,8 +49,13 @@ export default function ScrollStory() {
         if (cancelled || !video.current) return;
         url = URL.createObjectURL(new Blob(parts, { type: "video/mp4" }));
         video.current.src = url;
-        video.current.addEventListener("loadeddata", () => setLoaded(true), { once: true });
-        video.current.load();
+        const v = video.current;
+        v.addEventListener("loadeddata", () => setLoaded(true), { once: true });
+        v.load();
+        // iOS Safari won't decode frames of a never-played video: prime it with play→pause
+        v.play()
+          .then(() => v.pause())
+          .catch(() => {});
       } catch {
         /* poster stays; scrolling still drives captions */
       }

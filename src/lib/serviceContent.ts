@@ -5,7 +5,7 @@ export interface ServiceContent {
   metaTitle: string;
   metaDescription: string;
   intro: string;
-  /** detailed price range shown under the live price */
+  /** qualifier shown after the live price range (the numbers come from admin prices) */
   priceNote: string;
   features: string[];
   process: { step: string; desc: string }[];
@@ -63,7 +63,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
     "metaTitle": "Tuns Gazon Profesional Timișoara",
     "metaDescription": "Servicii profesionale de tuns gazon în Timișoara. Echipamente moderne, rezultate impecabile. De la 0.50 lei/mp. Sună: 0747 469 681",
     "intro": "Gazon impecabil, tuns cu echipamente profesionale de ultimă generație. Oferim servicii regulate de întreținere sau intervenții punctuale, cu colectarea completă a resturilor vegetale.",
-    "priceNote": "De la 0.50 lei/mp (suprafețe mari) până la 1.50 lei/mp",
+    "priceNote": "Prețul minim se aplică suprafețelor mari.",
     "features": [
       "Echipament ride-on profesional Viking/Stihl",
       "Tundere cu efect de dungi (striping)",
@@ -109,7 +109,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
     "metaTitle": "Scarificare & Aerisire Gazon Timișoara",
     "metaDescription": "Scarificare și aerisire profesională a gazonului în Timișoara. Eliminăm mușchiul și regenerăm gazonul. De la 1 leu/mp. Sună: 0747 469 681",
     "intro": "Regenerăm gazonul prin eliminarea mușchiului, a feltru-lui și a resturilor vegetale acumulate. Aerisirea permite rădăcinilor să respire și să absoarbă nutrienții eficient.",
-    "priceNote": "De la 1 leu/mp până la 2.50 lei/mp",
+    "priceNote": "",
     "features": [
       "Scarificare mecanică profesională",
       "Aerisire prin perforare la adâncime",
@@ -155,7 +155,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
     "metaTitle": "Montaj Gazon Rulou Timișoara",
     "metaDescription": "Montaj gazon rulou natural în Timișoara. Pregătire teren inclusă. De la 20 lei/mp. Sună: 0747 469 681",
     "intro": "Montaj profesional de gazon rulou natural. Pregătirea terenului este inclusă: nivelare, substrat, compactare. Rezultat instant — gazon verde din prima zi.",
-    "priceNote": "De la 20 lei/mp până la 35 lei/mp (pregătirea terenului inclusă)",
+    "priceNote": "Pregătirea terenului este inclusă.",
     "features": [
       "Gazon rulou natural — soi rezistent, grosime uniformă",
       "Pregătire completă a terenului (nivelare, substrat, compactare)",
@@ -199,7 +199,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
     "metaTitle": "Montaj Gazon Artificial Timișoara",
     "metaDescription": "Montaj gazon artificial premium în Timișoara, cu drenaj și pregătire teren. De la 40 lei/mp. Sună: 0747 469 681",
     "intro": "Gazon artificial premium pentru terase, curți și locuri de joacă: verde tot anul, fără udare și fără tuns. Pregătim baza, montăm cu drenaj și fixăm îmbinările la milimetru.",
-    "priceNote": "De la 40 lei/mp până la 80 lei/mp (în funcție de tipul gazonului și de bază)",
+    "priceNote": "În funcție de tipul gazonului și de bază.",
     "features": [
       "Gazon artificial premium — UV rezistent, 10+ ani durabilitate",
       "Sistem drenaj integrat (gazon artificial)",
@@ -245,7 +245,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
     "metaTitle": "Tuns Gard Viu Timișoara",
     "metaDescription": "Tuns și modelare gard viu profesional în Timișoara. Forme geometrice perfecte. De la 5 lei/ml. Sună: 0747 469 681",
     "intro": "Modelare precisă a gardurilor vii, de la forme simple la geometrice complexe. Menținem înălțimea uniformă și densitatea optimă pentru un aspect impecabil tot anul.",
-    "priceNote": "De la 5 lei/ml până la 15 lei/ml (în funcție de înălțime)",
+    "priceNote": "În funcție de înălțimea gardului viu.",
     "features": [
       "Modelare geometrică precisă",
       "Tundere la înălțime uniformă",
@@ -291,7 +291,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
     "metaTitle": "Toaletare Pomi și Arbuști Timișoara",
     "metaDescription": "Toaletare profesională a pomilor și arbuștilor în Timișoara. Tăiere de formare, eliminare ramuri uscate. De la 50 lei/buc. Sună: 0747 469 681",
     "intro": "Tăiere profesională, modelare și întreținere a pomilor și arbuștilor pentru un aspect sănătos și estetic. Lucrăm cu echipament specializat și respectăm perioadele optime de tăiere.",
-    "priceNote": "De la 50 lei/buc până la 200 lei/buc (în funcție de dimensiune)",
+    "priceNote": "În funcție de dimensiunea pomului.",
     "features": [
       "Tăiere de formare și întreținere",
       "Eliminare ramuri uscate sau bolnave",
@@ -337,7 +337,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
     "metaTitle": "Plantări Profesionale Timișoara",
     "metaDescription": "Plantări profesionale de flori, arbuști și copaci în Timișoara. Design peisagistic complet. De la 15 lei/mp. Sună: 0747 469 681",
     "intro": "Serviciu complet de plantare: de la design peisagistic până la plantarea efectivă de flori, arbuști, copaci și plante ornamentale. Creăm grădina visurilor tale cu plante selectate pentru clima Timișoarei.",
-    "priceNote": "De la 15 lei/mp până la 40 lei/mp (include plante + manoperă)",
+    "priceNote": "Include plante și manoperă.",
     "features": [
       "Design peisagistic personalizat",
       "Selecție plante adaptate climei locale",
@@ -383,7 +383,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
     "metaTitle": "Sisteme de Irigații Timișoara",
     "metaDescription": "Proiectare și montaj sisteme de irigații automate în Timișoara. Aspersoare, picurare, programatoare smart. De la 8 lei/mp. Sună: 0747 469 681",
     "intro": "Proiectare, montaj și întreținere sisteme automate de irigații. De la aspersoare pop-up până la sisteme de picurare inteligente cu senzori de umiditate. Economisești apă și timp.",
-    "priceNote": "De la 8 lei/mp până la 20 lei/mp (în funcție de complexitate)",
+    "priceNote": "În funcție de complexitate.",
     "features": [
       "Proiectare personalizată pe zone de udare",
       "Aspersoare pop-up și rotative",

@@ -10,7 +10,8 @@ test('every service has complete page content', () => {
     assert.ok(c.features.length >= 4, `${s.slug} features`);
     assert.equal(c.process.length, 4, `${s.slug} process`);
     assert.ok(c.faq.length >= 3, `${s.slug} faq`);
-    assert.ok(c.intro && c.metaTitle && c.metaDescription && c.priceNote, `${s.slug} text`);
+    assert.ok(c.intro && c.metaTitle && c.metaDescription, `${s.slug} text`);
+    assert.ok(!/\d+(\.\d+)? lei/.test(c.priceNote), `${s.slug} priceNote must not hard-code prices`);
   }
 });
 test('existing copy moved verbatim', () => {

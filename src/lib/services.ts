@@ -83,11 +83,26 @@ export function priceFor(def: ServiceDef, rows: PriceRow[] | undefined): Service
   if (!def.dataId || !rows) return CUSTOM;
   const row = rows.find((r) => r.id === def.dataId);
   if (!row || !row.price) return CUSTOM;
-  const num = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : null);
+  // admin writes 0 for a cleared field → treat non-positive values as missing
+  const num = (v: unknown) => (typeof v === "number" && Number.isFinite(v) && v > 0 ? v : null);
+  let min = num(row.priceMin);
+  let max = num(row.priceMax);
+  if (min != null && max != null && max < min) [min, max] = [max, min];
+  if (min == null && max != null) [min, max] = [max, null];
   return {
     label: "de la " + row.price.replace(/^de la\s+/i, ""),
-    min: num(row.priceMin),
-    max: num(row.priceMax),
+    min,
+    max,
     unit: row.unit ?? null,
   };
+}
+
+const fmt = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(2));
+
+/** "Între 0.50 și 1.50 lei/mp" from live prices; null when unpriced. */
+export function rangeLabel(p: ServicePrice): string | null {
+  if (p.min == null) return null;
+  const unit = p.unit ? `lei/${p.unit}` : "lei";
+  if (p.max == null || p.max === p.min) return `De la ${fmt(p.min)} ${unit}`;
+  return `Între ${fmt(p.min)} și ${fmt(p.max)} ${unit}`;
 }
