@@ -21,8 +21,8 @@ export default function Footer() {
       <div className="wrap">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="mb-5 inline-flex h-[52px] items-center rounded-full bg-white px-3.5">
-              <Image src="/logo1.png" alt="Immobilien Garten Service" width={76} height={76} className="-my-3 h-[76px] w-[76px]" />
+            <Link href="/" className="mb-5 inline-flex" aria-label="Immobilien Garten Service — Acasă">
+              <Image src="/logo-light.png" alt="Immobilien Garten Service" width={198} height={60} className="h-[60px] w-[198px]" />
             </Link>
             <p className="mb-5 max-w-[300px] leading-relaxed text-muted">
               Grădina ta, cartea noastră de vizită. Întreținere și amenajare grădini în Timișoara și împrejurimi.

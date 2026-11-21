@@ -26,8 +26,8 @@ export default function Navbar() {
   return (
     <header className="fixed top-3.5 left-1/2 -translate-x-1/2 z-50 w-[min(1160px,calc(100%-24px))]">
       <div className="glass !rounded-full flex items-center justify-between py-2 pl-2 pr-2.5">
-        <Link href="/" className="flex h-[52px] items-center rounded-full bg-white px-3.5" aria-label="Immobilien Garten Service — Acasă">
-          <Image src="/logo1.png" alt="Immobilien Garten Service" width={76} height={76} className="-my-3 h-[76px] w-[76px]" loading="eager" fetchPriority="high" />
+        <Link href="/" className="flex items-center rounded-full px-3 py-1" aria-label="Immobilien Garten Service — Acasă">
+          <Image src="/logo-light.png" alt="Immobilien Garten Service" width={152} height={46} className="h-[46px] w-[152px]" loading="eager" fetchPriority="high" />
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">

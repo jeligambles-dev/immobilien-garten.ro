@@ -1,33 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import "leaflet/dist/leaflet.css";
+import { AREA_COORDS, pinsFor } from "@/lib/areas";
 import { MapPin } from "lucide-react";
 import { useInView } from "@/components/ui/useInView";
 import bundled from "../../data/site-content.json";
 
 const FALLBACK: string[] = (bundled as { coveringAreas?: string[] }).coveringAreas ?? ["Timișoara"];
-
-/** Approximate positions (% of the map box) around Timișoara. */
-const POS: Record<string, [number, number]> = {
-  Timișoara: [50, 50],
-  Dumbrăvița: [58, 30],
-  Ghiroda: [74, 40],
-  Giroc: [58, 72],
-  Moșnița: [75, 66],
-  Săcălaz: [22, 40],
-  "Sânmihaiu Român": [26, 72],
-};
-
-function place(areas: string[]) {
-  const unknown = areas.filter((a) => !POS[a]);
-  return areas.map((a) => {
-    if (POS[a]) return { a, x: POS[a][0], y: POS[a][1] };
-    // unknown names: spread evenly on the outer ring
-    const k = unknown.indexOf(a);
-    const ang = (k / Math.max(1, unknown.length)) * Math.PI * 2 - Math.PI / 2;
-    return { a, x: 50 + Math.cos(ang) * 32.5, y: 50 + Math.sin(ang) * 32.5 };
-  });
-}
 
 export function useAreas() {
   const [areas, setAreas] = useState<string[]>(FALLBACK);
@@ -55,45 +35,61 @@ export function AreaChips({ areas }: { areas: string[] }) {
 }
 
 export default function ServiceArea({ areas }: { areas: string[] }) {
-  const { ref, inView } = useInView<HTMLDivElement>(0.3);
+  const box = useRef<HTMLDivElement>(null);
+  const { ref, inView } = useInView<HTMLDivElement>(0.05);
+
+  useEffect(() => {
+    if (!inView || !box.current) return;
+    let map: import("leaflet").Map | undefined;
+    let cancelled = false;
+    (async () => {
+      const L = (await import("leaflet")).default;
+      if (cancelled || !box.current) return;
+      const pins = pinsFor(areas);
+      const center = AREA_COORDS["Timișoara"];
+      map = L.map(box.current, {
+        center,
+        zoom: 11,
+        scrollWheelZoom: false, // page scroll must never get trapped by the map
+        dragging: !L.Browser.mobile,
+        zoomControl: true,
+        attributionControl: true,
+      });
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 16,
+        minZoom: 9,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(map);
+      L.circle(center, {
+        radius: 14000,
+        color: "#f5b83d",
+        weight: 1.5,
+        dashArray: "6 8",
+        fillColor: "#8fe0a6",
+        fillOpacity: 0.06,
+      }).addTo(map);
+      for (const p of pins) {
+        const main = p.name === "Timișoara";
+        L.marker([p.lat, p.lng], {
+          icon: L.divIcon({
+            className: "garten-pin",
+            html: `<span class="garten-pin__dot${main ? " garten-pin__dot--main" : ""}"></span><span class="garten-pin__label${main ? " garten-pin__label--main" : ""}">${p.name}</span>`,
+            iconSize: [0, 0],
+          }),
+          keyboard: false,
+        }).addTo(map);
+      }
+      if (pins.length > 1) map.fitBounds(L.latLngBounds(pins.map((p) => [p.lat, p.lng] as [number, number])).pad(0.25));
+    })();
+    return () => {
+      cancelled = true;
+      map?.remove();
+    };
+  }, [inView, areas]);
+
   return (
-    <div ref={ref} className="relative mx-auto aspect-square w-full max-w-[520px]">
-      <svg viewBox="0 0 400 400" className="h-full w-full" aria-hidden>
-        <defs>
-          <radialGradient id="area-glow">
-            <stop offset="0" stopColor="#8fe0a6" stopOpacity=".35" />
-            <stop offset="1" stopColor="#8fe0a6" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        <circle cx="200" cy="200" r="190" fill="url(#area-glow)" />
-        <g fill="none" stroke="rgba(143,224,166,.25)" strokeDasharray="3 6">
-          <circle cx="200" cy="200" r="70" />
-          <circle cx="200" cy="200" r="130" />
-          <circle cx="200" cy="200" r="185" />
-        </g>
-        <circle
-          cx="200"
-          cy="200"
-          r="130"
-          fill="none"
-          stroke="#f5b83d"
-          strokeWidth="1.5"
-          strokeDasharray="820"
-          strokeDashoffset={inView ? 0 : 820}
-          style={{ transition: "stroke-dashoffset 2.4s cubic-bezier(.2,.7,.2,1)" }}
-        />
-      </svg>
-      {place(areas).map(({ a, x, y }) => (
-        <span
-          key={a}
-          className={`absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${
-            a === "Timișoara" ? "bg-accent text-sm text-accent-ink" : "glass !rounded-full"
-          }`}
-          style={{ left: `${x}%`, top: `${y}%` }}
-        >
-          {a}
-        </span>
-      ))}
+    <div ref={ref} className="relative isolate aspect-[4/3] w-full overflow-hidden rounded-[28px] border border-white/15 shadow-[0_40px_90px_-30px_rgba(0,0,0,.8)] lg:aspect-square">
+      <div ref={box} className="garten-map absolute inset-0" role="img" aria-label={`Hartă zona de acoperire: ${areas.join(", ")}`} />
     </div>
   );
 }
