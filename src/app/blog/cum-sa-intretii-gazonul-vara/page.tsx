@@ -24,7 +24,7 @@ export default function Page() {
         gazonul tău poate rămâne sănătos și atractiv pe toată durata verii.
       </p>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Udarea Corectă — Regula De Aur
       </h2>
       <p>
@@ -40,7 +40,7 @@ export default function Page() {
         ideală.
       </p>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Tunderea Vara — Nu Tunde Prea Scurt
       </h2>
       <p>
@@ -54,7 +54,7 @@ export default function Page() {
         stresează gazonul și poate cauza arsuri pe vârfurile tăiate.
       </p>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Fertilizarea De Vară
       </h2>
       <p>
@@ -64,7 +64,7 @@ export default function Page() {
         iarba să reziste mai bine la secetă și căldură.
       </p>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Probleme Frecvente Vara
       </h2>
       <ul className="list-disc pl-5 space-y-2">
@@ -74,7 +74,7 @@ export default function Page() {
         <li><strong>Zone compactate:</strong> Aerisirea (cu furca sau scarificatorul) ajută apa și nutrienții să ajungă la rădăcini.</li>
       </ul>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Rezumat — Checklist Vara
       </h2>
       <ul className="list-disc pl-5 space-y-2">

@@ -1,13 +1,13 @@
 export default function PoliticaCookies() {
   return (
-    <section className="pt-24 pb-20">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-heading font-bold text-slate-900 text-3xl sm:text-4xl mb-8">
+    <section className="glow-bg pt-36 pb-28">
+      <div className="mx-auto max-w-[760px] px-5">
+        <h1 className="font-heading font-bold text-ink text-3xl sm:text-4xl mb-8">
           Politica de Cookie-uri
         </h1>
 
-        <div className="prose prose-slate max-w-none space-y-6 text-slate-600 text-sm leading-relaxed">
-          <h2 className="font-heading font-semibold text-slate-900 text-xl mt-8">
+        <div className="space-y-6 rounded-[28px] border border-white/10 bg-white/[.04] p-6 sm:p-10 text-ink/80 leading-relaxed">
+          <h2 className="font-heading font-semibold text-ink text-xl mt-8">
             Ce sunt cookie-urile?
           </h2>
           <p>
@@ -16,7 +16,7 @@ export default function PoliticaCookies() {
             să funcționeze corect și să ofere o experiență personalizată.
           </p>
 
-          <h2 className="font-heading font-semibold text-slate-900 text-xl mt-8">
+          <h2 className="font-heading font-semibold text-ink text-xl mt-8">
             Cookie-uri utilizate
           </h2>
           <ul className="list-disc pl-5 space-y-2">
@@ -30,7 +30,7 @@ export default function PoliticaCookies() {
             </li>
           </ul>
 
-          <h2 className="font-heading font-semibold text-slate-900 text-xl mt-8">
+          <h2 className="font-heading font-semibold text-ink text-xl mt-8">
             Cum puteți controla cookie-urile?
           </h2>
           <p>
@@ -39,7 +39,7 @@ export default function PoliticaCookies() {
             site-ului.
           </p>
 
-          <h2 className="font-heading font-semibold text-slate-900 text-xl mt-8">
+          <h2 className="font-heading font-semibold text-ink text-xl mt-8">
             Contact
           </h2>
           <p>
@@ -47,18 +47,18 @@ export default function PoliticaCookies() {
             contacta la{" "}
             <a
               href="mailto:contact@immobilien-garten.ro"
-              className="text-green-600 underline"
+              className="text-accent underline underline-offset-4"
             >
               contact@immobilien-garten.ro
             </a>{" "}
             sau la telefon{" "}
-            <a href="tel:0747469681" className="text-green-600 underline">
+            <a href="tel:0747469681" className="text-accent underline underline-offset-4">
               0747 469 681
             </a>
             .
           </p>
 
-          <p className="text-slate-400 text-xs mt-8">
+          <p className="text-ink/45 text-xs mt-8">
             Ultima actualizare: Martie 2026
           </p>
         </div>

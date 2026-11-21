@@ -24,11 +24,11 @@ export default function Page() {
         automată face diferența între o grădină verde și una uscată.
       </p>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Tipuri de Sisteme de Irigații
       </h2>
 
-      <h3 className="font-heading font-semibold text-slate-900 text-lg mt-6 mb-2">
+      <h3 className="font-heading font-semibold text-ink text-lg mt-6 mb-2">
         1. Aspersoare Pop-Up
       </h3>
       <p>
@@ -37,7 +37,7 @@ export default function Page() {
         populare pentru grădinile rezidențiale și oferă o acoperire uniformă.
       </p>
 
-      <h3 className="font-heading font-semibold text-slate-900 text-lg mt-6 mb-2">
+      <h3 className="font-heading font-semibold text-ink text-lg mt-6 mb-2">
         2. Sistem de Picurare (Drip)
       </h3>
       <p>
@@ -46,7 +46,7 @@ export default function Page() {
         Economisește până la 50% din apă comparativ cu aspersoarele.
       </p>
 
-      <h3 className="font-heading font-semibold text-slate-900 text-lg mt-6 mb-2">
+      <h3 className="font-heading font-semibold text-ink text-lg mt-6 mb-2">
         3. Micro-aspersoare
       </h3>
       <p>
@@ -54,7 +54,7 @@ export default function Page() {
         și sunt ideale pentru straturi mixte cu plante de dimensiuni diferite.
       </p>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Cum Proiectezi Corect
       </h2>
       <p>
@@ -69,7 +69,7 @@ export default function Page() {
         <li><strong>Zona umbră:</strong> Reducere cu 30-50% față de zona însorită</li>
       </ul>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Smart Irrigation — Merită?
       </h2>
       <p>
@@ -79,7 +79,7 @@ export default function Page() {
         medie, investiția se recuperează în 1-2 sezoane prin economia de apă.
       </p>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Costuri Orientative (Timișoara)
       </h2>
       <ul className="list-disc pl-5 space-y-2">

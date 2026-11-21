@@ -24,7 +24,7 @@ export default function Page() {
         risc în zilele cu vânt puternic.
       </p>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         De Ce Este Importantă Toaletarea
       </h2>
       <ul className="list-disc pl-5 space-y-2">
@@ -35,7 +35,7 @@ export default function Page() {
         <li><strong>Lumină:</strong> Permite luminii solare să ajungă la gazon și plantele de dedesubt.</li>
       </ul>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Când Se Taie Pomii
       </h2>
       <p>
@@ -49,11 +49,11 @@ export default function Page() {
         <li><strong>Arbuști cu flori de vară (hortensie, trandafir):</strong> Sfârșitul iernii (februarie-martie).</li>
       </ul>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Tipuri de Tăiere
       </h2>
 
-      <h3 className="font-heading font-semibold text-slate-900 text-lg mt-6 mb-2">
+      <h3 className="font-heading font-semibold text-ink text-lg mt-6 mb-2">
         Tăierea de formare
       </h3>
       <p>
@@ -61,7 +61,7 @@ export default function Page() {
         structură solidă de ramuri principale care va susține coroana matură.
       </p>
 
-      <h3 className="font-heading font-semibold text-slate-900 text-lg mt-6 mb-2">
+      <h3 className="font-heading font-semibold text-ink text-lg mt-6 mb-2">
         Tăierea de întreținere
       </h3>
       <p>
@@ -70,7 +70,7 @@ export default function Page() {
         și permite circulația aerului în coroană.
       </p>
 
-      <h3 className="font-heading font-semibold text-slate-900 text-lg mt-6 mb-2">
+      <h3 className="font-heading font-semibold text-ink text-lg mt-6 mb-2">
         Tăierea de rejuvenare
       </h3>
       <p>
@@ -78,7 +78,7 @@ export default function Page() {
         care se face etapizat, pe parcursul a 2-3 ani, pentru a nu stresa pomul.
       </p>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Greșeli De Evitat
       </h2>
       <ul className="list-disc pl-5 space-y-2">

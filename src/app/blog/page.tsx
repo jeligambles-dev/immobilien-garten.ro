@@ -1,5 +1,14 @@
 import Link from "next/link";
+import SectionHead from "@/components/ui/SectionHead";
+import Reveal from "@/components/ui/Reveal";
 import { Clock, ArrowRight } from "lucide-react";
+
+const IMG: Record<string, string> = {
+  "cum-sa-intretii-gazonul-vara": "/img/services/tuns-gazon-poster.webp",
+  "ghid-sistem-irigatii": "/img/services/irigatii-poster.webp",
+  "cand-sa-plantezi-gazon-rulou": "/img/services/gazon-rulou-poster.webp",
+  "toaletarea-pomilor-ghid-complet": "/img/services/toaletare-pomi-poster.webp",
+};
 
 const articles = [
   {
@@ -34,43 +43,35 @@ const articles = [
 
 export default function Blog() {
   return (
-    <section className="pt-24 pb-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
-          <h1 className="font-heading font-bold text-slate-900 text-3xl sm:text-4xl mb-4">
-            Blog & Sfaturi
-          </h1>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-            Articole practice despre îngrijirea grădinii, sfaturi de la
-            profesioniști și ghiduri pas cu pas.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {articles.map((a) => (
-            <Link
-              key={a.slug}
-              href={`/blog/${a.slug}`}
-              className="group bg-white rounded-2xl border border-green-100 hover:border-green-300 hover:shadow-lg hover:shadow-green-100/50 transition-all duration-200 p-6 flex flex-col"
-            >
-              <div className="flex items-center gap-3 text-xs text-slate-400 mb-3">
-                <span>{a.date}</span>
-                <span className="flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
-                  {a.readTime}
+    <section className="glow-bg pb-28 pt-40">
+      <div className="wrap">
+        <SectionHead
+          as="h1"
+          eyebrow="Blog & sfaturi"
+          title={<>Sfaturi de la <em>profesioniști</em>.</>}
+          lead="Articole practice despre îngrijirea grădinii și ghiduri pas cu pas."
+        />
+        <div className="grid gap-6 md:grid-cols-2">
+          {articles.map((a, i) => (
+            <Reveal key={a.slug} delay={(i % 2) * 80}>
+              <Link href={`/blog/${a.slug}`} className="glass group flex h-full flex-col overflow-hidden transition-transform duration-300 hover:-translate-y-1">
+                <span className="relative block aspect-[16/8] overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={IMG[a.slug]} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 </span>
-              </div>
-              <h2 className="font-heading font-semibold text-slate-900 text-lg mb-2 group-hover:text-green-600 transition-colors duration-200">
-                {a.title}
-              </h2>
-              <p className="text-slate-600 text-sm leading-relaxed flex-1 mb-4">
-                {a.excerpt}
-              </p>
-              <span className="inline-flex items-center gap-1 text-sm font-medium text-green-600">
-                Citește mai mult
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
-              </span>
-            </Link>
+                <span className="flex flex-1 flex-col p-7">
+                  <span className="mb-3 flex items-center gap-3 text-xs text-ink/55">
+                    <span>{a.date}</span>
+                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{a.readTime}</span>
+                  </span>
+                  <h2 className="mb-3 text-2xl font-extrabold leading-tight">{a.title}</h2>
+                  <span className="mb-5 flex-1 leading-relaxed text-muted">{a.excerpt}</span>
+                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-accent">
+                    Citește mai mult <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </span>
+              </Link>
+            </Reveal>
           ))}
         </div>
       </div>

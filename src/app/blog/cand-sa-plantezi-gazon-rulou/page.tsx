@@ -24,7 +24,7 @@ export default function Page() {
         între un gazon care prinde și unul care se usucă.
       </p>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Când Este Momentul Ideal
       </h2>
       <p>
@@ -38,7 +38,7 @@ export default function Page() {
         temperaturile depășesc 35°C.
       </p>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Pregătirea Terenului — Pasul Cel Mai Important
       </h2>
       <p>
@@ -52,7 +52,7 @@ export default function Page() {
         <li><strong>Udare:</strong> Udați ușor terenul cu o zi înainte de montaj.</li>
       </ol>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Montajul Propriu-Zis
       </h2>
       <p>
@@ -62,7 +62,7 @@ export default function Page() {
         marginile pentru a elimina spațiile dintre fâșii.
       </p>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Îngrijirea În Primele 3 Săptămâni
       </h2>
       <p>
@@ -76,7 +76,7 @@ export default function Page() {
         <li><strong>Nu călcați:</strong> Evitați traficul pe gazon în primele 2 săptămâni.</li>
       </ul>
 
-      <h2 className="font-heading font-bold text-slate-900 text-xl mt-8 mb-3">
+      <h2 className="font-heading font-bold text-ink text-xl mt-8 mb-3">
         Costuri Orientative
       </h2>
       <p>
