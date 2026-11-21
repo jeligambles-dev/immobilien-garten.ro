@@ -17,7 +17,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <>
+    <div className="site">
       <Navbar />
       <main>{children}</main>
       <Footer />
@@ -25,6 +25,6 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
       <WhatsAppButton />
       <BackToTop />
       <CookieConsent />
-    </>
+    </div>
   );
 }

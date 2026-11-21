@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Garten mockup v3 – story</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#f3f8f1;--muted:rgba(243,248,241,.75);--accent:#f5b83d;--accent-ink:#1a1204;--leaf:#8fe0a6;--bg:#07140d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:"Space Grotesk",system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:Archivo,system-ui,sans-serif;letter-spacing:-.02em}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+.glass{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border-radius:24px;box-shadow:0 30px 80px -20px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.25)}
+.stage{position:fixed;inset:0;z-index:0;overflow:hidden;background:#000}
+.stage video{position:absolute;inset:-3%;width:106%;height:106%;object-fit:cover;will-change:transform;transform:translateZ(0)}
+.load{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:3;transition:opacity .6s}.load i{display:block;height:100%;width:0;background:var(--accent);box-shadow:0 0 12px var(--accent);transition:width .2s}
+.load.done{opacity:0}
+.stage .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,16,10,.7) 0%,rgba(5,16,10,.2) 45%,transparent 70%),linear-gradient(0deg,rgba(5,16,10,.7),transparent 45%)}
+nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:min(1160px,calc(100% - 24px));z-index:50;display:flex;align-items:center;justify-content:space-between;padding:8px 10px 8px 8px;border-radius:999px}
+.logo-pill{background:#fff;border-radius:999px;padding:4px 14px;display:flex;align-items:center;height:52px}
+.logo-pill img{height:76px;margin:-12px 0}
+nav ul{display:flex;gap:26px;list-style:none;font-size:14px;font-weight:500}
+.cta{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-ink);font-weight:700;border-radius:999px;padding:12px 20px;text-decoration:none;font-size:14px;box-shadow:0 10px 30px -8px rgba(245,184,61,.7)}
+.ghost{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:999px;color:var(--ink);text-decoration:none;font-weight:600;font-size:14px}
+@media(max-width:860px){nav ul{display:none}}
+
+.track{position:relative;z-index:1;height:1100vh}
+.pin{position:sticky;top:0;height:100vh}
+.hero-card{position:absolute;left:max(20px,calc(50% - 580px));top:50%;transform:translateY(-50%);max-width:560px;padding:40px;transition:opacity .25s}
+.badge{display:inline-flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:20px}.badge b{color:var(--leaf)}
+h1{font-size:clamp(42px,5.6vw,74px);line-height:.98;font-weight:900;margin-bottom:20px}
+h1 em{font-style:normal;color:var(--accent)}
+.hero-card p{color:var(--muted);font-size:17px;line-height:1.6;margin-bottom:28px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+
+/* big service caption */
+.svc{position:absolute;left:max(20px,calc(50% - 580px));bottom:11vh;width:min(560px,calc(100% - 40px));padding:30px 34px;display:flex;gap:22px;align-items:center;opacity:0;transform:translateY(24px);transition:opacity .35s,transform .35s}
+.svc.on{opacity:1;transform:none}
+.svc .num{font-family:Archivo;font-weight:900;font-size:64px;line-height:1;color:var(--accent);min-width:84px}
+.svc .k{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--leaf);margin-bottom:6px}
+.svc h3{font-size:clamp(30px,3.4vw,44px);line-height:1.02;margin-bottom:8px}
+.svc .d{color:var(--muted);font-size:17px;line-height:1.45;margin-bottom:12px}
+.svc .p{display:inline-block;font-weight:700;font-size:18px;color:var(--accent-ink);background:var(--accent);padding:8px 14px;border-radius:999px}
+.svc a.more{margin-left:10px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.4)}
+
+/* rail */
+.rail{position:absolute;right:max(16px,calc(50% - 600px));top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;padding:14px 10px;border-radius:22px}
+.rail button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;justify-content:flex-end;font-size:13px;color:var(--muted);padding:4px 6px;border-radius:10px}
+.rail button i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.35);transition:all .3s}
+.rail button.on{color:#fff;font-weight:600}
+.rail button.on i{background:var(--accent);box-shadow:0 0 0 4px rgba(245,184,61,.25);transform:scale(1.2)}
+.rail button span{opacity:.0;transition:opacity .3s}
+.rail:hover button span,.rail button.on span{opacity:1}
+@media(max-width:900px){.rail{display:none}.svc{padding:22px}.svc .num{font-size:44px;min-width:56px}}
+.content{position:relative;z-index:1;padding:120px 0;background:linear-gradient(180deg,transparent,rgba(7,20,13,.9) 30%)}
+.content h2{font-size:clamp(32px,4vw,52px);max-width:700px;line-height:1.05;margin-bottom:24px}
+.content p{color:var(--muted);font-size:18px;max-width:560px;margin-bottom:28px}
+</style>
+</head>
+<body>
+<div class="stage"><video id="v" poster="/files/story-poster-hd.jpg" muted playsinline preload="auto" disablepictureinpicture></video><div class="shade"></div><div class="load" id="load"><i id="loadbar"></i></div></div>
+
+<nav class="glass">
+  <div class="logo-pill"><img src="/files/logo1.png" alt="Immobilien Garten Service"></div>
+  <ul><li>Acasă</li><li>Portofoliu</li><li>Produse &amp; Servicii</li><li>Blog</li><li>Contact</li></ul>
+  <a class="cta" href="#">☎ 0747 469 681</a>
+</nav>
+
+<div class="track" id="track">
+  <div class="pin">
+    <div class="hero-card glass" id="heroCard">
+      <div class="badge"><b>●</b> Timișoara &amp; împrejurimi</div>
+      <h1>Grădina ta,<br><em>cartea noastră</em><br>de vizită.</h1>
+      <p>Derulează și vezi cum transformăm o grădină — de la pavaj până la irigații, totul cu o singură echipă.</p>
+      <div class="row"><a class="cta" href="#">☎ Sună acum</a><a class="ghost glass" href="#">Vezi lucrările →</a></div>
+    </div>
+    <div id="caps"></div>
+    <div class="rail glass" id="rail"></div>
+  </div>
+</div>
+
+<section class="content"><div class="wrap">
+  <h2>Toată grădina, o singură echipă.</h2>
+  <p>Spune-ne ce ai nevoie și revenim cu o ofertă în 24 de ore.</p>
+  <a class="cta" href="#">Cere ofertă</a>
+</div></section>
+
+<script>
+// segments match the hard cuts in the video (seconds)
+const S=[
+ {t:0,   n:'Sosire',k:'',h:'',d:'',p:''},
+ {t:2.96,n:'Pavaje',k:'Amenajare curte',h:'Pavaje & alei',d:'Alei, terase și intrări din pavele, compactate pe pat de nisip.',p:'Ofertă personalizată'},
+ {t:6,   n:'Tuns gazon',k:'Întreținere',h:'Tuns gazon',d:'Gazon impecabil, cu dungi perfecte, tuns cu echipamente profesionale.',p:'de la 0.50 lei/mp'},
+ {t:9,   n:'Scarificare',k:'Regenerare',h:'Scarificare & aerisire',d:'Scoatem mușchiul și pâsla, ca gazonul să respire și să crească des.',p:'de la 1 leu/mp'},
+ {t:11.79,n:'Gazon rulou',k:'Gazon nou',h:'Gazon rulou',d:'Gazon gata crescut, montat pe teren nivelat — verde din prima zi.',p:'de la 20 lei/mp'},
+ {t:14.79,n:'Gazon artificial',k:'Fără întreținere',h:'Gazon artificial',d:'Terase și locuri de joacă verzi tot anul, montate la milimetru.',p:'de la 40 lei/mp'},
+ {t:17.83,n:'Gard viu',k:'Tuns la linie',h:'Tuns gard viu',d:'Thuja, tuia și gard viu tunse drept, cu resturile strânse.',p:'de la 5 lei/ml'},
+ {t:20.71,n:'Toaletare pomi',k:'Pomi & arbuști',h:'Toaletare pomi',d:'Tăiere și modelare pentru pomi sănătoși și coroane aerisite.',p:'de la 50 lei/buc'},
+ {t:23.63,n:'Plantări',k:'Peisagistică',h:'Plantări profesionale',d:'Flori, arbuști și copaci aleși pentru grădina ta, plantați corect.',p:'de la 15 lei/mp'},
+ {t:26.54,n:'Irigații',k:'Final',h:'Sisteme de irigații',d:'Udare automată, ca toată grădina să rămână verde fără efort.',p:'de la 8 lei/mp'}
+];
+const v=document.getElementById('v'),track=document.getElementById('track'),card=document.getElementById('heroCard'),caps=document.getElementById('caps'),rail=document.getElementById('rail');
+S.forEach((s,i)=>{ if(i){caps.insertAdjacentHTML('beforeend',`<div class="svc glass" data-i="${i}"><div class="num">${String(i).padStart(2,'0')}</div><div><div class="k">${s.k}</div><h3>${s.h}</h3><div class="d">${s.d}</div><span class="p">${s.p}</span><a class="more" href="#">Detalii →</a></div></div>`)}
+  rail.insertAdjacentHTML('beforeend',`<button data-i="${i}"><span>${s.n}</span><i></i></button>`)});
+const svcs=[...caps.children],dots=[...rail.children];
+// pick resolution: 1440p (upscaled from 4K master) on big screens, 720p on phones / slow data
+const small=Math.min(screen.width,screen.height)*devicePixelRatio<900||innerWidth<760||(navigator.connection&&navigator.connection.saveData);
+const SRC=small?'/files/story-720.mp4':'/files/story-1440.mp4';
+// stream into a blob with progress, so every seek is local and instant
+const loadEl=document.getElementById('load'),bar=document.getElementById('loadbar');
+(async()=>{const r=await fetch(SRC),len=+r.headers.get('content-length')||0,rd=r.body.getReader(),parts=[];let got=0;
+  for(;;){const{done,value}=await rd.read();if(done)break;parts.push(value);got+=value.length;if(len)bar.style.width=(got/len*100)+'%'}
+  v.src=URL.createObjectURL(new Blob(parts,{type:'video/mp4'}));v.load();
+  v.addEventListener('loadeddata',()=>{bar.style.width='100%';loadEl.classList.add('done')},{once:true})})();
+const D=30,FPS=24;
+function prog(){const r=track.getBoundingClientRect();return Math.min(1,Math.max(0,-r.top/(r.height-innerHeight)))}
+let target=0,cur=0,last=performance.now();addEventListener('scroll',()=>target=prog(),{passive:true});target=prog();cur=target;
+function seg(t){let k=0;S.forEach((s,i)=>{if(t>=s.t)k=i});return k}
+// pointer parallax, eased in the same loop (no CSS transition fighting the frame)
+let px=0,py=0,mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5},{passive:true});
+let lastK=-1;
+function tick(now){const dt=Math.min(64,now-last)/16.67;last=now;
+  // frame-rate independent easing
+  cur+=(target-cur)*(1-Math.pow(1-.1,dt));if(Math.abs(target-cur)<1e-5)cur=target;
+  // snap to real frames and only seek when the decoder is free → no queued seeks, no stutter
+  const t=Math.round(cur*(D-.05)*FPS)/FPS;
+  if(v.readyState>=2&&!v.seeking&&Math.abs(v.currentTime-t)>.5/FPS)v.currentTime=t;
+  px+=(mx-px)*.06*dt;py+=(my-py)*.06*dt;v.style.transform=`translate3d(${-px*20}px,${-py*12}px,0)`;
+  const k=seg(t);card.style.opacity=Math.max(0,1-t/1.6);card.style.pointerEvents=t>1.2?'none':'';
+  if(k!==lastK){lastK=k;svcs.forEach(e=>e.classList.toggle('on',+e.dataset.i===k));dots.forEach(e=>e.classList.toggle('on',+e.dataset.i===k))}
+  requestAnimationFrame(tick)}requestAnimationFrame(tick);
+dots.forEach(d=>d.onclick=()=>{const t=S[+d.dataset.i].t+.4;const y=track.offsetTop+(t/D)*(track.offsetHeight-innerHeight);scrollTo({top:y,behavior:'smooth'})});
+</script>
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Garten mockup v5 – full home</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#f3f8f1;--muted:rgba(243,248,241,.75);--accent:#f5b83d;--accent-ink:#1a1204;--leaf:#8fe0a6;--bg:#07140d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:"Space Grotesk",system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:Archivo,system-ui,sans-serif;letter-spacing:-.02em}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+.glass{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border-radius:24px;box-shadow:0 30px 80px -20px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.25)}
+.stage{position:fixed;inset:0;z-index:0;overflow:hidden;background:#000}
+.stage video{position:absolute;inset:-3%;width:106%;height:106%;object-fit:cover;will-change:transform;transform:translateZ(0)}
+.load{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:3;transition:opacity .6s}.load i{display:block;height:100%;width:0;background:var(--accent);box-shadow:0 0 12px var(--accent);transition:width .2s}
+.load.done{opacity:0}
+.stage .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,16,10,.7) 0%,rgba(5,16,10,.2) 45%,transparent 70%),linear-gradient(0deg,rgba(5,16,10,.7),transparent 45%)}
+nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:min(1160px,calc(100% - 24px));z-index:50;display:flex;align-items:center;justify-content:space-between;padding:8px 10px 8px 8px;border-radius:999px}
+.logo-pill{background:#fff;border-radius:999px;padding:4px 14px;display:flex;align-items:center;height:52px}
+.logo-pill img{height:76px;margin:-12px 0}
+nav ul{display:flex;gap:26px;list-style:none;font-size:14px;font-weight:500}
+.cta{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-ink);font-weight:700;border-radius:999px;padding:12px 20px;text-decoration:none;font-size:14px;box-shadow:0 10px 30px -8px rgba(245,184,61,.7)}
+.ghost{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:999px;color:var(--ink);text-decoration:none;font-weight:600;font-size:14px}
+@media(max-width:860px){nav ul{display:none}}
+
+.track{position:relative;z-index:1;height:1100vh}
+.pin{position:sticky;top:0;height:100vh}
+.hero-card{position:absolute;left:max(20px,calc(50% - 580px));top:50%;transform:translateY(-50%);max-width:560px;padding:40px;transition:opacity .25s}
+.badge{display:inline-flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:20px}.badge b{color:var(--leaf)}
+h1{font-size:clamp(42px,5.6vw,74px);line-height:.98;font-weight:900;margin-bottom:20px}
+h1 em{font-style:normal;color:var(--accent)}
+.hero-card p{color:var(--muted);font-size:17px;line-height:1.6;margin-bottom:28px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+
+/* big service caption */
+.svc{position:absolute;left:max(20px,calc(50% - 580px));bottom:11vh;width:min(560px,calc(100% - 40px));padding:30px 34px;display:flex;gap:22px;align-items:center;opacity:0;transform:translateY(24px);transition:opacity .35s,transform .35s}
+.svc.on{opacity:1;transform:none}
+.svc .num{font-family:Archivo;font-weight:900;font-size:64px;line-height:1;color:var(--accent);min-width:84px}
+.svc .k{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--leaf);margin-bottom:6px}
+.svc h3{font-size:clamp(30px,3.4vw,44px);line-height:1.02;margin-bottom:8px}
+.svc .d{color:var(--muted);font-size:17px;line-height:1.45;margin-bottom:12px}
+.svc .p{display:inline-block;font-weight:700;font-size:18px;color:var(--accent-ink);background:var(--accent);padding:8px 14px;border-radius:999px}
+.svc a.more{margin-left:10px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.4)}
+
+/* rail */
+.rail{position:absolute;right:max(16px,calc(50% - 600px));top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;padding:14px 10px;border-radius:22px}
+.rail button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;justify-content:flex-end;font-size:13px;color:var(--muted);padding:4px 6px;border-radius:10px}
+.rail button i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.35);transition:all .3s}
+.rail button.on{color:#fff;font-weight:600}
+.rail button.on i{background:var(--accent);box-shadow:0 0 0 4px rgba(245,184,61,.25);transform:scale(1.2)}
+.rail button span{opacity:.0;transition:opacity .3s}
+.rail:hover button span,.rail button.on span{opacity:1}
+@media(max-width:900px){.rail{display:none}.svc{padding:22px}.svc .num{font-size:44px;min-width:56px}}
+.content{position:relative;z-index:1;padding:120px 0;background:linear-gradient(180deg,transparent,rgba(7,20,13,.9) 30%)}
+.content h2{font-size:clamp(32px,4vw,52px);max-width:700px;line-height:1.05;margin-bottom:24px}
+.content p{color:var(--muted);font-size:18px;max-width:560px;margin-bottom:28px}
+</style>
+</head>
+<body>
+<div class="stage"><video id="v" poster="/files/story-poster-hd.jpg" muted playsinline preload="auto" disablepictureinpicture></video><div class="shade"></div><div class="load" id="load"><i id="loadbar"></i></div></div>
+
+<nav class="glass">
+  <div class="logo-pill"><img src="/files/logo1.png" alt="Immobilien Garten Service"></div>
+  <ul><li>Acasă</li><li>Portofoliu</li><li>Produse &amp; Servicii</li><li>Blog</li><li>Contact</li></ul>
+  <a class="cta" href="#">☎ 0747 469 681</a>
+</nav>
+
+<div class="track" id="track">
+  <div class="pin">
+    <div class="hero-card glass" id="heroCard">
+      <div class="badge"><b>●</b> Timișoara &amp; împrejurimi</div>
+      <h1>Grădina ta,<br><em>cartea noastră</em><br>de vizită.</h1>
+      <p>Derulează și vezi cum transformăm o grădină — de la pavaj până la irigații, totul cu o singură echipă.</p>
+      <div class="row"><a class="cta" href="#">☎ Sună acum</a><a class="ghost glass" href="#">Vezi lucrările →</a></div>
+    </div>
+    <div id="caps"></div>
+    <div class="rail glass" id="rail"></div>
+  </div>
+</div>
+
+<style>
+.below{position:relative;z-index:2;background:radial-gradient(1200px 600px at 85% 10%,rgba(143,224,166,.10),transparent 60%),radial-gradient(900px 600px at 0% 45%,rgba(245,184,61,.07),transparent 60%),radial-gradient(1000px 700px at 100% 85%,rgba(143,224,166,.08),transparent 60%),var(--bg)}
+.below:before{content:"";position:absolute;left:0;right:0;top:-220px;height:220px;background:linear-gradient(180deg,transparent,var(--bg));pointer-events:none}
+.sec{padding:120px 0;position:relative}
+.eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--leaf);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.eyebrow:before{content:"";width:28px;height:1px;background:var(--leaf)}
+.sec h2{font-size:clamp(34px,4.4vw,60px);line-height:1.02;font-weight:900;max-width:780px;margin-bottom:18px}
+.sec h2 em{font-style:normal;color:var(--accent)}
+.lead{color:var(--muted);font-size:18px;line-height:1.6;max-width:560px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:56px;flex-wrap:wrap}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* services bento */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:260px;gap:18px;perspective:1200px}
+.tile{position:relative;border-radius:26px;overflow:hidden;text-decoration:none;color:var(--ink);transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s;box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 70%;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.tile:hover img{transform:scale(1.07)}
+.tile:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,16,10,0) 30%,rgba(5,16,10,.85))}
+.tile .gl{position:absolute;left:14px;right:14px;bottom:14px;z-index:2;padding:16px 18px;border-radius:18px;display:flex;justify-content:space-between;align-items:flex-end;gap:10px;transform:translateZ(40px)}
+.tile h3{font-size:22px;line-height:1.05}
+.tile .k{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--leaf);margin-bottom:6px}
+.tile .pp{white-space:nowrap;font-weight:700;font-size:14px;background:var(--accent);color:var(--accent-ink);padding:7px 11px;border-radius:999px}
+.tile .n{position:absolute;top:16px;left:18px;z-index:2;font-family:Archivo;font-weight:900;font-size:15px;color:#fff;opacity:.85;transform:translateZ(30px)}
+.tile .shine{position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.18),transparent 45%);opacity:0;transition:opacity .3s}
+.tile:hover .shine{opacity:1}
+.tile-cta{background:linear-gradient(140deg,#f5b83d,#e0912a);color:var(--accent-ink);padding:24px;display:flex;flex-direction:column;justify-content:space-between}.tile-cta:after{display:none}.tile-cta .k{color:rgba(26,18,4,.7);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px}.tile-cta h3{font-size:24px}.tile-cta .cta{background:var(--accent-ink);color:var(--accent);box-shadow:none}
+.t-big{grid-column:span 2;grid-row:span 2}.t-big h3{font-size:34px}.t-wide{grid-column:span 2}
+@media(max-width:980px){.bento{grid-template-columns:repeat(2,1fr);grid-auto-rows:220px}.t-big{grid-row:span 1}}
+@media(max-width:560px){.bento{grid-template-columns:1fr}.t-big,.t-wide{grid-column:span 1}}
+
+/* before / after */
+.ba{display:grid;grid-template-columns:1.6fr 1fr;gap:24px;align-items:stretch}
+.ba-frame{position:relative;border-radius:28px;overflow:hidden;aspect-ratio:4/3;user-select:none;touch-action:pan-y;cursor:ew-resize;box-shadow:0 40px 90px -30px rgba(0,0,0,.8)}
+.ba-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ba-frame .aft{clip-path:inset(0 0 0 var(--p,50%))}
+.ba-frame .handle{position:absolute;top:0;bottom:0;left:var(--p,50%);width:2px;background:#fff;box-shadow:0 0 20px rgba(0,0,0,.4)}
+.ba-frame .knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-weight:700}
+.ba-frame .tag{position:absolute;top:18px;padding:7px 14px;border-radius:999px;font-size:13px;font-weight:600}
+.ba-frame .tb{left:18px}.ba-frame .ta{right:18px;background:var(--accent);color:var(--accent-ink);border:0}
+.ba-side{padding:34px;display:flex;flex-direction:column;gap:12px}
+.ba-tab{all:unset;cursor:pointer;padding:18px 20px;border-radius:18px;border:1px solid rgba(255,255,255,.1);transition:all .3s}
+.ba-tab b{display:block;font-family:Archivo;font-size:19px;margin-bottom:4px}
+.ba-tab span{color:var(--muted);font-size:14px;line-height:1.5;display:none}
+.ba-tab.on{background:rgba(255,255,255,.1);border-color:rgba(245,184,61,.6)}.ba-tab.on span{display:block}
+@media(max-width:900px){.ba{grid-template-columns:1fr}}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.stat{padding:34px 28px}
+.stat .big{font-family:Archivo;font-weight:900;font-size:clamp(44px,5vw,68px);line-height:1;color:var(--accent);margin-bottom:12px}
+.stat b{display:block;font-size:18px;margin-bottom:6px}.stat p{color:var(--muted);font-size:15px;line-height:1.5}
+@media(max-width:900px){.stats{grid-template-columns:1fr 1fr}}
+
+/* projects */
+.rail-x{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 20px 30px;margin:0 -20px;scrollbar-width:none}
+.rail-x::-webkit-scrollbar{display:none}
+.proj{flex:0 0 min(520px,85vw);scroll-snap-align:start;border-radius:28px;overflow:hidden;position:relative}
+.proj .ph{aspect-ratio:16/10;overflow:hidden}.proj .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s}
+.proj:hover .ph img{transform:scale(1.05)}
+.proj .bd{padding:24px 26px 26px}
+.proj h3{font-size:24px;margin-bottom:8px}.proj p{color:var(--muted);font-size:15px;line-height:1.55;margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:12px;padding:6px 11px;border-radius:999px;background:rgba(143,224,166,.12);color:var(--leaf);border:1px solid rgba(143,224,166,.25)}
+.arrows{display:flex;gap:10px}.arrows button{all:unset;cursor:pointer;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:20px}
+
+/* reviews */
+.revs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.rev{padding:32px;display:flex;flex-direction:column;gap:18px}
+.stars{color:var(--accent);letter-spacing:3px}
+.rev q{font-size:18px;line-height:1.55;quotes:none}
+.who{display:flex;gap:12px;align-items:center;margin-top:auto}
+.av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--leaf),#2f7a4a);display:grid;place-items:center;font-weight:800;color:#07140d}
+.who small{display:block;color:var(--muted)}
+@media(max-width:900px){.revs{grid-template-columns:1fr}}
+
+/* area */
+.area{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+.map{position:relative;aspect-ratio:1;max-width:520px;margin:auto;width:100%}
+.map svg{width:100%;height:100%}
+.pin-l{position:absolute;transform:translate(-50%,-50%);font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;white-space:nowrap}
+.pin-l:before{content:"";position:absolute;left:50%;top:100%;width:7px;height:7px;border-radius:50%;background:var(--leaf);transform:translate(-50%,4px);box-shadow:0 0 0 4px rgba(143,224,166,.25)}
+.pin-l.main{background:var(--accent);color:var(--accent-ink);border:0;font-size:14px}
+@media(max-width:900px){.area{grid-template-columns:1fr}}
+
+/* faq */
+.faq{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.faq details{border-radius:20px;padding:0 26px;transition:background .3s}
+.faq summary{list-style:none;cursor:pointer;padding:22px 0;font-weight:600;font-size:18px;display:flex;justify-content:space-between;gap:20px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";font-size:26px;line-height:1;color:var(--accent);transition:transform .3s}
+.faq details[open] summary:after{transform:rotate(45deg)}
+.faq details p{color:var(--muted);line-height:1.65;padding:0 0 22px;font-size:16px}
+
+/* cta + footer */
+.ctab{position:relative;border-radius:36px;overflow:hidden;padding:80px 60px;display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center}
+.ctab .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.ctab:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,16,10,.92),rgba(5,16,10,.55));z-index:-1}
+.ctab h2{font-size:clamp(36px,4.4vw,60px);line-height:1.02;font-weight:900}
+.form{padding:28px;display:flex;flex-direction:column;gap:12px}
+.form input,.form select{all:unset;padding:15px 18px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);font-size:15px}
+.form input::placeholder{color:rgba(243,248,241,.55)}
+.form .cta{justify-content:center;padding:16px}
+@media(max-width:900px){.ctab{grid-template-columns:1fr;padding:44px 24px}}
+footer{padding:80px 0 40px;border-top:1px solid rgba(255,255,255,.08);margin-top:120px}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
+footer h4{font-family:Archivo;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--leaf);margin-bottom:16px}
+footer li{list-style:none;color:var(--muted);margin-bottom:10px;font-size:15px}
+.legal{margin-top:60px;color:rgba(243,248,241,.45);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(max-width:900px){.fgrid{grid-template-columns:1fr 1fr}}
+</style>
+
+<div class="below">
+<!-- SERVICES -->
+<section class="sec"><div class="wrap">
+  <div class="head reveal"><div><div class="eyebrow">Servicii &amp; prețuri</div><h2>Tot ce are nevoie <em>grădina ta</em>, de la o singură echipă.</h2></div>
+  <p class="lead">Prețuri clare, afișate de la început. Ofertă exactă în 24 de ore, după o evaluare gratuită.</p></div>
+  <div class="bento" id="bento"></div>
+</div></section>
+
+<!-- BEFORE / AFTER -->
+<section class="sec"><div class="wrap">
+  <div class="head reveal"><div><div class="eyebrow">Înainte &amp; după</div><h2>Trage de linie. <em>Diferența</em> vorbește singură.</h2></div></div>
+  <div class="ba reveal">
+    <div class="ba-frame" id="baf"><img id="bab" alt="Înainte"><img class="aft" id="baa" alt="După"><span class="tag tb glass">Înainte</span><span class="tag ta">După</span><div class="handle"><div class="knob glass">⇆</div></div></div>
+    <div class="ba-side glass" id="bas"></div>
+  </div>
+</div></section>
+
+<!-- STATS -->
+<section class="sec" style="padding-top:40px"><div class="wrap">
+  <div class="stats">
+    <div class="stat glass reveal"><div class="big" data-count="50">0</div><b>grădini transformate</b><p>Curți rezidențiale din Timișoara și împrejurimi.</p></div>
+    <div class="stat glass reveal"><div class="big">24h</div><b>ofertă de preț</b><p>Evaluare gratuită, răspuns în aceeași zi.</p></div>
+    <div class="stat glass reveal"><div class="big">2–5</div><b>zile până la start</b><p>Programare rapidă, chiar și în sezon.</p></div>
+    <div class="stat glass reveal"><div class="big">100%</div><b>echipamente proprii</b><p>Profesionale, întreținute, de ultimă generație.</p></div>
+  </div>
+</div></section>
+
+<!-- PROJECTS -->
+<section class="sec"><div class="wrap">
+  <div class="head reveal"><div><div class="eyebrow">Lucrări recente</div><h2>Proiecte <em>reale</em>, clienți reali.</h2></div>
+  <div class="arrows"><button class="glass" onclick="pr.scrollBy({left:-540,behavior:'smooth'})">←</button><button class="glass" onclick="pr.scrollBy({left:540,behavior:'smooth'})">→</button></div></div>
+  <div class="rail-x reveal" id="pr"></div>
+</div></section>
+
+<!-- REVIEWS -->
+<section class="sec"><div class="wrap">
+  <div class="head reveal"><div><div class="eyebrow">Recenzii</div><h2>Ce spun <em>clienții</em>.</h2></div><p class="lead">Păreri de la clienți din Timișoara și împrejurimi.</p></div>
+  <div class="revs" id="revs"></div>
+</div></section>
+
+<!-- AREA -->
+<section class="sec"><div class="wrap area">
+  <div class="reveal"><div class="eyebrow">Zona de acoperire</div><h2>Venim la tine, <em>oriunde în jurul Timișoarei</em>.</h2>
+  <p class="lead" style="margin-bottom:26px">Deplasare inclusă în Timișoara și localitățile limitrofe. Pentru alte zone, sună-ne.</p>
+  <div class="chips" id="areas"></div></div>
+  <div class="map reveal" id="map">
+    <svg viewBox="0 0 400 400"><defs><radialGradient id="rg"><stop offset="0" stop-color="#8fe0a6" stop-opacity=".35"/><stop offset="1" stop-color="#8fe0a6" stop-opacity="0"/></radialGradient></defs>
+    <circle cx="200" cy="200" r="190" fill="url(#rg)"/>
+    <g fill="none" stroke="rgba(143,224,166,.25)" stroke-dasharray="3 6"><circle cx="200" cy="200" r="70"/><circle cx="200" cy="200" r="130"/><circle cx="200" cy="200" r="185"/></g>
+    <circle cx="200" cy="200" r="130" fill="none" stroke="#f5b83d" stroke-width="1.5" stroke-dasharray="820" stroke-dashoffset="820" id="ring"><animate attributeName="stroke-dashoffset" to="0" dur="2.4s" fill="freeze" begin="indefinite" id="ringA"/></circle></svg>
+  </div>
+</div></section>
+
+<!-- FAQ -->
+<section class="sec"><div class="wrap">
+  <div class="head reveal" style="justify-content:center;text-align:center"><div><div class="eyebrow" style="justify-content:center">Întrebări frecvente</div><h2>Bine de știut.</h2></div></div>
+  <div class="faq" id="faq"></div>
+</div></section>
+
+<!-- CTA -->
+<section class="sec" style="padding-bottom:0"><div class="wrap">
+  <div class="ctab reveal"><img class="bgimg" src="/files/st-10.jpg" alt="">
+    <div><div class="eyebrow">Ofertă gratuită</div><h2>Pregătit să-ți transformi <em style="font-style:normal;color:var(--accent)">grădina</em>?</h2>
+    <p class="lead" style="margin:18px 0 26px">Lasă-ne un număr și te sunăm noi. Sau sună direct — răspundem 7 zile din 7.</p>
+    <div class="row"><a class="cta" href="#">☎ 0747 469 681</a><a class="ghost glass" href="#">WhatsApp</a></div></div>
+    <form class="form glass" onsubmit="return false"><input placeholder="Nume"><input placeholder="Telefon"><select><option>Ce serviciu te interesează?</option><option>Tuns gazon</option><option>Gazon rulou</option><option>Pavaje</option></select><button class="cta">Cere ofertă →</button></form>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="fgrid">
+    <div><div class="logo-pill" style="display:inline-flex;margin-bottom:18px"><img src="/files/logo1.png" alt="Immobilien Garten Service"></div><p style="color:var(--muted);line-height:1.6;max-width:300px">Întreținere și amenajare grădini în Timișoara și împrejurimi.</p></div>
+    <div><h4>Servicii</h4><ul><li>Tuns gazon</li><li>Gazon rulou</li><li>Irigații</li><li>Pavaje</li></ul></div>
+    <div><h4>Companie</h4><ul><li>Portofoliu</li><li>Blog</li><li>Contact</li></ul></div>
+    <div><h4>Contact</h4><ul><li>0747 469 681</li><li>Timișoara, Timiș</li><li>Luni–Duminică</li></ul></div>
+  </div>
+  <div class="legal"><span>© 2026 Immobilien Garten Service</span><span>Politica cookies</span></div>
+</div></footer>
+</div>
+
+<script>
+const SV=[
+ ['Pavaje & alei','Amenajare','Ofertă personalizată','st-02.jpg','t-big'],
+ ['Tuns gazon','Întreținere','0.50 lei/mp','st-03.jpg',''],
+ ['Scarificare','Regenerare','1 leu/mp','st-04.jpg',''],
+ ['Gazon rulou','Gazon nou','20 lei/mp','st-05.jpg','t-wide'],
+ ['Gazon artificial','Tot anul verde','40 lei/mp','st-06.jpg',''],
+ ['Gard viu','Tuns drept','5 lei/ml','st-07.jpg',''],
+ ['Toaletare pomi','Pomi & arbuști','50 lei/buc','st-08.jpg','t-wide'],
+ ['Plantări','Peisagistică','15 lei/mp','st-09.jpg',''],
+ ['Irigații','Automatizare','8 lei/mp','st-10.jpg','t-wide']];
+bento.innerHTML=SV.map((s,i)=>`<a href="#" class="tile reveal ${s[4]}"><img src="/files/${s[3]}" alt="${s[0]}" loading="lazy"><span class="n">0${i+1}</span><div class="gl glass"><div><div class="k">${s[1]}</div><h3>${s[0]}</h3></div><span class="pp">${s[2].includes('lei')?'de la ':''}${s[2]}</span></div><i class="shine"></i></a>`).join('')+`<a href="#" class="tile tile-cta reveal"><div><div class="k">Nu știi de unde să începi?</div><h3>Evaluare gratuită la tine acasă</h3></div><span class="cta" style="align-self:flex-start">Cere ofertă →</span></a>`;
+document.querySelectorAll('.tile').forEach(t=>{t.addEventListener('pointermove',e=>{const r=t.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;t.style.transform=`rotateY(${(x-.5)*10}deg) rotateX(${(.5-y)*10}deg) translateZ(10px)`;t.style.setProperty('--mx',x*100+'%');t.style.setProperty('--my',y*100+'%')});t.addEventListener('pointerleave',()=>t.style.transform='')});
+
+const BA=[['Amenajare grădină cu pietriș','De la teren gol la grădină decorativă cu pietriș, lavandă și elemente ornamentale.','gravel'],['Regenerare gazon','Gazon cu pete transformat într-un covor verde uniform, tuns profesional.','lawn'],['Curățare și întreținere curte','Zonă cu buruieni transformată în gazon impecabil cu gard viu.','fence']];
+bas.innerHTML=BA.map((b,i)=>`<button class="ba-tab ${i?'':'on'}" data-i="${i}"><b>${b[0]}</b><span>${b[1]}</span></button>`).join('');
+function setBA(i){bab.src=`/files/pf/before-${BA[i][2]}.jpg`;baa.src=`/files/pf/after-${BA[i][2]}.jpg`;bas.querySelectorAll('.ba-tab').forEach(t=>t.classList.toggle('on',+t.dataset.i===i))}
+setBA(0);bas.onclick=e=>{const t=e.target.closest('.ba-tab');if(t)setBA(+t.dataset.i)};
+let drag=false;const setP=e=>{const r=baf.getBoundingClientRect();baf.style.setProperty('--p',Math.min(100,Math.max(0,(e.clientX-r.left)/r.width*100))+'%')};
+baf.onpointerdown=e=>{drag=true;baf.setPointerCapture(e.pointerId);setP(e)};baf.onpointermove=e=>drag&&setP(e);baf.onpointerup=()=>drag=false;
+
+const PR=[['Amenajare completă curte rezidențială','Gazon rulou, plantări ornamentale, gard viu și irigații pentru o curte de 300 mp.','gazon-1',['Gazon rulou','Plantări','Gard viu','Irigații']],
+['Grădină nouă cu gazon și gard viu','Teren nivelat, gazon rulou montat și gard viu de thuja tuns la linie.','gard-viu-2',['Gazon rulou','Gard viu']],
+['Toaletare livadă','Tăiere de formare și întreținere pentru pomii fructiferi, resturi colectate.','pomi-1',['Toaletare pomi']],
+['Plantări ornamentale','Straturi noi cu arbuști și flori perene, mulcite și udate automat.','plantari-1',['Plantări','Irigații']],
+['Întreținere lunară','Tuns gazon cu dungi, contururi curate și verificarea irigațiilor.','gazon-3',['Tuns gazon','Abonament']]];
+pr.innerHTML=PR.map(p=>`<article class="proj glass"><div class="ph"><img src="/files/pf/${p[2]}.jpg" alt="" loading="lazy"></div><div class="bd"><h3>${p[0]}</h3><p>${p[1]}</p><div class="chips">${p[3].map(c=>`<span class="chip">${c}</span>`).join('')}</div></div></article>`).join('');
+
+const RV=[['Maria P.','Timișoara','Echipă foarte profesionistă! Au transformat complet curtea noastră în doar 2 zile. Gazonul arată perfect.'],['Andrei D.','Dumbrăvița','Am apelat la ei pentru irigații și tuns gazon lunar. Punctuali, curați și prețuri corecte. Colaborăm de peste un an.'],['Elena S.','Giroc','Toaletarea pomilor a fost impecabilă. Au venit cu echipament profesional și au lăsat totul curat.']];
+revs.innerHTML=RV.map(r=>`<figure class="rev glass reveal"><div class="stars">★★★★★</div><q>${r[2]}</q><div class="who"><div class="av">${r[0][0]}</div><div><b>${r[0]}</b><small>${r[1]}</small></div></div></figure>`).join('');
+
+const AR=[['Timișoara',50,50,1],['Dumbrăvița',58,30],['Ghiroda',74,40],['Giroc',58,72],['Moșnița',75,66],['Săcălaz',22,40],['Sânmihaiu Român',26,72]];
+areas.innerHTML=AR.map(a=>`<span class="chip" style="font-size:14px;padding:9px 14px">📍 ${a[0]}</span>`).join('');
+map.insertAdjacentHTML('beforeend',AR.map(a=>`<span class="pin-l ${a[3]?'main':'glass'}" style="left:${a[1]}%;top:${a[2]}%">${a[0]}</span>`).join(''));
+
+const FQ=[['Cât costă serviciile?','Prețurile pornesc de la 0.50 lei/mp pentru tuns gazon. Oferta exactă depinde de suprafață și complexitate — evaluarea e gratuită.'],['Oferiți garanție pentru gazonul montat?','Da, pentru gazonul rulou montat de noi, cu respectarea instrucțiunilor de îngrijire pe care le primești.'],['În cât timp puteți veni?','De regulă în 2–5 zile lucrătoare. Pentru urgențe, sună-ne direct.'],['Aveți abonamente de întreținere?','Da — tuns gazon, curățenie și verificarea irigațiilor, lunar, la preț preferențial.']];
+faq.innerHTML=FQ.map((f,i)=>`<details class="glass reveal" ${i?'':'open'}><summary>${f[0]}</summary><p>${f[1]}</p></details>`).join('');
+
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;el.classList.add('in');io.unobserve(el);
+  const c=el.querySelector('[data-count]');if(c){const n=+c.dataset.count,t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/1400);c.textContent=Math.round(n*(1-Math.pow(1-p,3)))+'+';if(p<1)requestAnimationFrame(f)})(t0)}
+  if(el.id==='map')document.getElementById('ringA').beginElement()}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(el.closest('.bento,.revs,.stats')?(i%4)*80:0)+'ms';io.observe(el)});
+</script>
+
+
+<script>
+// segments match the hard cuts in the video (seconds)
+const S=[
+ {t:0,   n:'Sosire',k:'',h:'',d:'',p:''},
+ {t:2.96,n:'Pavaje',k:'Amenajare curte',h:'Pavaje & alei',d:'Alei, terase și intrări din pavele, compactate pe pat de nisip.',p:'Ofertă personalizată'},
+ {t:6,   n:'Tuns gazon',k:'Întreținere',h:'Tuns gazon',d:'Gazon impecabil, cu dungi perfecte, tuns cu echipamente profesionale.',p:'de la 0.50 lei/mp'},
+ {t:9,   n:'Scarificare',k:'Regenerare',h:'Scarificare & aerisire',d:'Scoatem mușchiul și pâsla, ca gazonul să respire și să crească des.',p:'de la 1 leu/mp'},
+ {t:11.79,n:'Gazon rulou',k:'Gazon nou',h:'Gazon rulou',d:'Gazon gata crescut, montat pe teren nivelat — verde din prima zi.',p:'de la 20 lei/mp'},
+ {t:14.79,n:'Gazon artificial',k:'Fără întreținere',h:'Gazon artificial',d:'Terase și locuri de joacă verzi tot anul, montate la milimetru.',p:'de la 40 lei/mp'},
+ {t:17.83,n:'Gard viu',k:'Tuns la linie',h:'Tuns gard viu',d:'Thuja, tuia și gard viu tunse drept, cu resturile strânse.',p:'de la 5 lei/ml'},
+ {t:20.71,n:'Toaletare pomi',k:'Pomi & arbuști',h:'Toaletare pomi',d:'Tăiere și modelare pentru pomi sănătoși și coroane aerisite.',p:'de la 50 lei/buc'},
+ {t:23.63,n:'Plantări',k:'Peisagistică',h:'Plantări profesionale',d:'Flori, arbuști și copaci aleși pentru grădina ta, plantați corect.',p:'de la 15 lei/mp'},
+ {t:26.54,n:'Irigații',k:'Final',h:'Sisteme de irigații',d:'Udare automată, ca toată grădina să rămână verde fără efort.',p:'de la 8 lei/mp'}
+];
+const v=document.getElementById('v'),track=document.getElementById('track'),card=document.getElementById('heroCard'),caps=document.getElementById('caps'),rail=document.getElementById('rail');
+S.forEach((s,i)=>{ if(i){caps.insertAdjacentHTML('beforeend',`<div class="svc glass" data-i="${i}"><div class="num">${String(i).padStart(2,'0')}</div><div><div class="k">${s.k}</div><h3>${s.h}</h3><div class="d">${s.d}</div><span class="p">${s.p}</span><a class="more" href="#">Detalii →</a></div></div>`)}
+  rail.insertAdjacentHTML('beforeend',`<button data-i="${i}"><span>${s.n}</span><i></i></button>`)});
+const svcs=[...caps.children],dots=[...rail.children];
+// pick resolution: 1440p (upscaled from 4K master) on big screens, 720p on phones / slow data
+const small=Math.min(screen.width,screen.height)*devicePixelRatio<900||innerWidth<760||(navigator.connection&&navigator.connection.saveData);
+const SRC=small?'/files/story-720.mp4':'/files/story-1440.mp4';
+// stream into a blob with progress, so every seek is local and instant
+const loadEl=document.getElementById('load'),bar=document.getElementById('loadbar');
+(async()=>{const r=await fetch(SRC),len=+r.headers.get('content-length')||0,rd=r.body.getReader(),parts=[];let got=0;
+  for(;;){const{done,value}=await rd.read();if(done)break;parts.push(value);got+=value.length;if(len)bar.style.width=(got/len*100)+'%'}
+  v.src=URL.createObjectURL(new Blob(parts,{type:'video/mp4'}));v.load();
+  v.addEventListener('loadeddata',()=>{bar.style.width='100%';loadEl.classList.add('done')},{once:true})})();
+const D=30,FPS=24;
+function prog(){const r=track.getBoundingClientRect();return Math.min(1,Math.max(0,-r.top/(r.height-innerHeight)))}
+let target=0,cur=0,last=performance.now();addEventListener('scroll',()=>target=prog(),{passive:true});target=prog();cur=target;
+function seg(t){let k=0;S.forEach((s,i)=>{if(t>=s.t)k=i});return k}
+// pointer parallax, eased in the same loop (no CSS transition fighting the frame)
+let px=0,py=0,mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5},{passive:true});
+let lastK=-1;
+function tick(now){const dt=Math.min(64,now-last)/16.67;last=now;
+  // frame-rate independent easing
+  cur+=(target-cur)*(1-Math.pow(1-.1,dt));if(Math.abs(target-cur)<1e-5)cur=target;
+  // snap to real frames and only seek when the decoder is free → no queued seeks, no stutter
+  const t=Math.round(cur*(D-.05)*FPS)/FPS;
+  if(v.readyState>=2&&!v.seeking&&Math.abs(v.currentTime-t)>.5/FPS)v.currentTime=t;
+  px+=(mx-px)*.06*dt;py+=(my-py)*.06*dt;v.style.transform=`translate3d(${-px*20}px,${-py*12}px,0)`;
+  const k=seg(t);card.style.opacity=Math.max(0,1-t/1.6);card.style.pointerEvents=t>1.2?'none':'';
+  if(k!==lastK){lastK=k;svcs.forEach(e=>e.classList.toggle('on',+e.dataset.i===k));dots.forEach(e=>e.classList.toggle('on',+e.dataset.i===k))}
+  requestAnimationFrame(tick)}requestAnimationFrame(tick);
+dots.forEach(d=>d.onclick=()=>{const t=S[+d.dataset.i].t+.4;const y=track.offsetTop+(t/D)*(track.offsetHeight-innerHeight);scrollTo({top:y,behavior:'smooth'})});
+</script>
+</body>
+</html>

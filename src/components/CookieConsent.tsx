@@ -25,12 +25,12 @@ export default function CookieConsent() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 sm:p-6">
-      <div className="mx-auto max-w-4xl bg-white rounded-2xl shadow-2xl border border-slate-200 p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+      <div className="glass mx-auto max-w-4xl !bg-[rgba(10,28,18,.82)] p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <div className="flex-1">
-          <p className="text-sm text-slate-700 leading-relaxed">
+          <p className="text-sm text-ink/85 leading-relaxed">
             Folosim cookie-uri pentru a îmbunătăți experiența pe site. Prin
             continuarea navigării, ești de acord cu{" "}
-            <a href="/politica-cookies" className="text-green-600 underline hover:text-green-700">
+            <a href="/politica-cookies" className="text-accent underline">
               politica noastră de cookie-uri
             </a>
             .
@@ -39,19 +39,19 @@ export default function CookieConsent() {
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={decline}
-            className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg transition-colors duration-200 cursor-pointer"
+            className="px-4 py-2 text-sm font-medium text-ink/80 hover:text-white border border-white/20 rounded-full transition-colors duration-200 cursor-pointer"
           >
             Refuz
           </button>
           <button
             onClick={accept}
-            className="px-4 py-2 text-sm font-semibold text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors duration-200 cursor-pointer"
+            className="btn-cta !py-2"
           >
             Accept
           </button>
           <button
             onClick={decline}
-            className="p-1.5 text-slate-400 hover:text-slate-600 cursor-pointer"
+            className="p-1.5 text-ink/50 hover:text-ink cursor-pointer"
             aria-label="Închide"
           >
             <X className="h-4 w-4" />

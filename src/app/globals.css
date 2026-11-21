@@ -28,3 +28,237 @@ body {
 .font-heading {
   font-family: var(--font-heading), system-ui, sans-serif;
 }
+
+/* ───────────── Glass redesign (public site only; admin keeps the light theme) ───────────── */
+@theme {
+  --color-night: #07140d;
+  --color-ink: #f3f8f1;
+  --color-muted: rgba(243, 248, 241, 0.75);
+  --color-accent: #f5b83d;
+  --color-accent-ink: #1a1204;
+  --color-leaf: #8fe0a6;
+}
+
+html:has(.site),
+body:has(.site) {
+  background: #07140d;
+  color-scheme: dark;
+}
+
+.site {
+  background: #07140d;
+  color: #f3f8f1;
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+.site h1,
+.site h2,
+.site h3 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* soft glows behind content sections */
+.glow-bg {
+  background:
+    radial-gradient(1200px 600px at 85% 10%, rgba(143, 224, 166, 0.1), transparent 60%),
+    radial-gradient(900px 600px at 0% 45%, rgba(245, 184, 61, 0.07), transparent 60%),
+    radial-gradient(1000px 700px at 100% 85%, rgba(143, 224, 166, 0.08), transparent 60%),
+    #07140d;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  backdrop-filter: blur(22px) saturate(160%);
+  border-radius: 24px;
+  box-shadow:
+    0 30px 80px -20px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #8fe0a6;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: #8fe0a6;
+}
+
+.h-sec {
+  font-size: clamp(34px, 4.4vw, 60px);
+  line-height: 1.02;
+  font-weight: 900;
+}
+.h-sec em,
+.h-hero em {
+  font-style: normal;
+  color: #f5b83d;
+}
+.h-hero {
+  font-size: clamp(42px, 5.6vw, 74px);
+  line-height: 0.98;
+  font-weight: 900;
+}
+.lead {
+  color: rgba(243, 248, 241, 0.75);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #f5b83d;
+  color: #1a1204;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-size: 14px;
+  box-shadow: 0 10px 30px -8px rgba(245, 184, 61, 0.7);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 34px -8px rgba(245, 184, 61, 0.85);
+}
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  color: #f3f8f1;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.pill-price {
+  display: inline-block;
+  white-space: nowrap;
+  font-weight: 700;
+  background: #f5b83d;
+  color: #1a1204;
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 14px;
+}
+
+.chip {
+  font-size: 12px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: rgba(143, 224, 166, 0.12);
+  color: #8fe0a6;
+  border: 1px solid rgba(143, 224, 166, 0.25);
+}
+
+.field {
+  width: 100%;
+  padding: 15px 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 15px;
+  color: #f3f8f1;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.field::placeholder {
+  color: rgba(243, 248, 241, 0.55);
+}
+.field:focus {
+  border-color: #f5b83d;
+}
+.field option {
+  background: #0d2016;
+}
+
+/* reveal on scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* 3D tilt card */
+.tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tilt .shine {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.18), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tilt:hover .shine {
+  opacity: 1;
+}
+
+/* FAQ accordion */
+.faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 22px 0;
+  font-weight: 600;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary::after {
+  content: "+";
+  font-size: 26px;
+  line-height: 1;
+  color: #f5b83d;
+  transition: transform 0.3s;
+}
+.faq-item[open] summary::after {
+  transform: rotate(45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .tilt {
+    transform: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

@@ -167,7 +167,7 @@ export default function Chatbot() {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-6 right-6 z-40 h-14 w-14 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg shadow-green-600/30 flex items-center justify-center transition-colors duration-200 hover:scale-110 cursor-pointer"
+          className="fixed bottom-6 right-6 z-40 h-14 w-14 bg-accent text-accent-ink rounded-full shadow-[0_10px_30px_-8px_rgba(245,184,61,.7)] flex items-center justify-center transition-colors duration-200 hover:scale-110 cursor-pointer"
           aria-label="Deschide chat"
         >
           <MessageCircle className="h-6 w-6" />
@@ -180,7 +180,7 @@ export default function Chatbot() {
           style={{ height: "min(560px, calc(100vh - 6rem))" }}
         >
           {/* Header */}
-          <div className="bg-green-600 text-white px-4 py-3 flex items-center justify-between shrink-0">
+          <div className="bg-[#0d2016] text-white px-4 py-3 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
               <Bot className="h-5 w-5" />
               <div>
