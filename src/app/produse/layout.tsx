@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Produse & Servicii",
+  title: "Produse",
   description:
-    "Servicii profesionale de grădinărit și produse de calitate: îngrășăminte, gazon rulou, gazon artificial, sisteme irigații. Timișoara.",
+    "Produse pentru grădină în Timișoara: îngrășăminte, gazon rulou, gazon artificial, pământ vegetal, componente irigații, scoarță și pietriș decorativ.",
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
