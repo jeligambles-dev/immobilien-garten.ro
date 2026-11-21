@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import BlogArticle from "@/components/BlogArticle";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/blog/cum-sa-intretii-gazonul-vara" },
   title: "Cum Să Întreții Gazonul Vara — Ghid Complet",
   description: "Sfaturi practice pentru un gazon verde și sănătos vara. Udare, tundere, fertilizare — totul pas cu pas.",
 };

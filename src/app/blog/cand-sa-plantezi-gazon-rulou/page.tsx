@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import BlogArticle from "@/components/BlogArticle";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/blog/cand-sa-plantezi-gazon-rulou" },
   title: "Când Și Cum Să Plantezi Gazon Rulou — Tot Ce Trebuie Să Știi",
   description: "Ghid complet pentru montajul gazonului rulou. Când este momentul ideal, cum pregătești terenul și cum îngrijești gazonul nou.",
 };

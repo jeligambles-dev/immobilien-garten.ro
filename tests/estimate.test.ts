@@ -21,3 +21,15 @@ test('estimateRange null when unpriced or no qty', () => {
 test('formatLei uses ro-RO grouping', () => {
   assert.equal(formatLei(1250).replace(/\s/g, ' '), '1.250 lei');
 });
+
+test('parseQty reads Romanian thousands separators', () => {
+  assert.equal(parseQty('1.500'), 1500);
+  assert.equal(parseQty('12.000'), 12000);
+  assert.equal(parseQty('1.500,5'), 1500.5);
+  assert.equal(parseQty('1.5'), 1.5);
+});
+test('parseQty rejects absurdly large quantities', () => {
+  assert.equal(parseQty('100000'), 100000);
+  assert.equal(parseQty('100001'), null);
+  assert.equal(parseQty('99999999999999999999'), null);
+});

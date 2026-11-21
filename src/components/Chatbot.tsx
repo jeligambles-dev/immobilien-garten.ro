@@ -1,5 +1,6 @@
 "use client";
 
+import { fetchSiteContent } from "./siteContent";
 import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send, Bot, User, Calculator } from "lucide-react";
 
@@ -114,18 +115,16 @@ export default function Chatbot() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetch("/api/admin/content")
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.services?.length) {
-          const p: Record<string, { unit: string; min: number; max: number }> = {};
-          data.services.forEach((s: { title: string; unit: string; priceMin: number; priceMax: number }) => {
-            p[s.title] = { unit: s.unit, min: s.priceMin, max: s.priceMax };
-          });
-          setPrices(p);
-        }
-      })
-      .catch(() => {});
+    fetchSiteContent().then((data) => {
+      const services = data?.services as { title: string; unit: string; priceMin: number; priceMax: number }[] | undefined;
+      if (services?.length) {
+        const p: Record<string, { unit: string; min: number; max: number }> = {};
+        services.forEach((s) => {
+          p[s.title] = { unit: s.unit, min: s.priceMin, max: s.priceMax };
+        });
+        setPrices(p);
+      }
+    });
   }, []);
 
   useEffect(() => {

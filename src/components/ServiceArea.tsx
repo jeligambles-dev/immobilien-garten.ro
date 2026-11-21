@@ -6,18 +6,16 @@ import { AREA_COORDS, pinsFor } from "@/lib/areas";
 import { MapPin } from "lucide-react";
 import { useInView } from "@/components/ui/useInView";
 import bundled from "../../data/site-content.json";
+import { fetchSiteContent } from "./siteContent";
 
 const FALLBACK: string[] = (bundled as { coveringAreas?: string[] }).coveringAreas ?? ["Timișoara"];
 
 export function useAreas() {
   const [areas, setAreas] = useState<string[]>(FALLBACK);
   useEffect(() => {
-    fetch("/api/admin/content")
-      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((d) => {
-        if (Array.isArray(d?.coveringAreas) && d.coveringAreas.length) setAreas(d.coveringAreas);
-      })
-      .catch(() => {});
+    fetchSiteContent().then((d) => {
+      if (Array.isArray(d?.coveringAreas) && d.coveringAreas.length) setAreas(d.coveringAreas as string[]);
+    });
   }, []);
   return areas;
 }

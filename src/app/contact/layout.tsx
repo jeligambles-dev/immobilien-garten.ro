@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contact" },
   title: "Contact",
   description:
     "Contactează Immobilien Garten Service Timișoara. Telefon: 0747 469 681. Programează o lucrare sau solicită o ofertă gratuită.",

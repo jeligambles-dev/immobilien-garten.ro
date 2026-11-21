@@ -1,3 +1,11 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Politica de cookie-uri",
+  description: "Ce cookie-uri folosește site-ul Immobilien Garten Service și cum le poți controla.",
+  alternates: { canonical: "/politica-cookies" },
+};
+
 export default function PoliticaCookies() {
   return (
     <section className="glow-bg pt-36 pb-28">

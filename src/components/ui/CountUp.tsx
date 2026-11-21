@@ -5,7 +5,8 @@ import { useInView, prefersReducedMotion } from "./useInView";
 
 export default function CountUp({ to, suffix = "", ms = 1400 }: { to: number; suffix?: string; ms?: number }) {
   const { ref, inView } = useInView<HTMLSpanElement>();
-  const [n, setN] = useState(0);
+  // server HTML / no-JS show the real number; the count-up starts from 0 once visible
+  const [n, setN] = useState(to);
   useEffect(() => {
     if (!inView) return;
     if (prefersReducedMotion()) {

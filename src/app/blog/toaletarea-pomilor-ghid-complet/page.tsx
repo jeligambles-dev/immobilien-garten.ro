@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import BlogArticle from "@/components/BlogArticle";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/blog/toaletarea-pomilor-ghid-complet" },
   title: "Toaletarea Pomilor: Când, Cum Și De Ce Este Importantă",
   description: "Ghid complet pentru toaletarea pomilor. Când se taie, ce tehnici se folosesc și cum să eviți greșelile comune.",
 };

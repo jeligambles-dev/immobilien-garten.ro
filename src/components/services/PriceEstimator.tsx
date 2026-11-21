@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Calculator } from "lucide-react";
 import { SERVICES, priceFor, type PriceRow } from "@/lib/services";
-import { parseQty, estimateRange, formatLei } from "@/lib/estimate";
+import { parseQty, estimateRange, formatLei, MAX_QTY } from "@/lib/estimate";
 
 const UNIT_LABEL: Record<string, string> = { mp: "m²", ml: "metri liniari", buc: "bucăți" };
 
@@ -36,7 +36,7 @@ export default function PriceEstimator({ rows }: { rows: PriceRow[] | undefined 
           ))}
         </select>
         <label className="mt-2 text-sm text-muted" htmlFor="est-qty">Cantitate ({UNIT_LABEL[unit] ?? unit})</label>
-        <input id="est-qty" className="field" inputMode="decimal" placeholder="ex. 200" value={qty} onChange={(e) => setQty(e.target.value)} />
+        <input id="est-qty" className="field" inputMode="decimal" placeholder="ex. 200" maxLength={12} value={qty} onChange={(e) => setQty(e.target.value)} />
         <div className="mt-3 min-h-[92px] rounded-2xl border border-white/10 bg-white/[.04] p-5" aria-live="polite">
           {range ? (
             <>
@@ -47,7 +47,10 @@ export default function PriceEstimator({ rows }: { rows: PriceRow[] | undefined 
             </>
           ) : (
             <div className="flex items-center gap-3 text-muted">
-              <Calculator className="h-5 w-5 text-accent" /> Introdu o cantitate pentru estimare.
+              <Calculator className="h-5 w-5 text-accent" />
+              {Number(qty.replace(/\./g, "").replace(",", ".")) > MAX_QTY
+                ? "Pentru suprafețe atât de mari, cere o ofertă personalizată."
+                : "Introdu o cantitate pentru estimare."}
             </div>
           )}
         </div>

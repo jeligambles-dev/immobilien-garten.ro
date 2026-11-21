@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type PointerEvent } from "react";
 import Image from "next/image";
 import { MoveHorizontal } from "lucide-react";
 import bundled from "../../data/site-content.json";
+import { fetchSiteContent } from "./siteContent";
 
 interface Comparison {
   id: string;
@@ -22,12 +23,9 @@ export default function BeforeAfter() {
   const dragging = useRef(false);
 
   useEffect(() => {
-    fetch("/api/admin/content")
-      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((d) => {
-        if (Array.isArray(d?.beforeAfter) && d.beforeAfter.length) setItems(d.beforeAfter);
-      })
-      .catch(() => {});
+    fetchSiteContent().then((d) => {
+      if (Array.isArray(d?.beforeAfter) && d.beforeAfter.length) setItems(d.beforeAfter as Comparison[]);
+    });
   }, []);
 
   const pair = items[Math.min(current, items.length - 1)];

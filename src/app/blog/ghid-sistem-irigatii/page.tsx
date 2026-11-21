@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import BlogArticle from "@/components/BlogArticle";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/blog/ghid-sistem-irigatii" },
   title: "Ghid: Cum Să Alegi Sistemul de Irigații Potrivit",
   description: "Aspersoare, picurare sau smart? Ghid complet pentru alegerea sistemului de irigații perfect pentru grădina ta.",
 };

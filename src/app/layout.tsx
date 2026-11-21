@@ -38,9 +38,6 @@ export const metadata: Metadata = {
   authors: [{ name: "Immobilien Garten Service" }],
   creator: "Immobilien Garten Service",
   metadataBase: new URL("https://immobilien-garten.ro"),
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     locale: "ro_RO",
@@ -93,6 +90,9 @@ export default function RootLayout({
         <StructuredData />
       </head>
       <body className="bg-white text-slate-900 antialiased">
+        <noscript>
+          <style>{`.reveal{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
         <GoogleAnalytics />
         <SiteShell>{children}</SiteShell>
       </body>

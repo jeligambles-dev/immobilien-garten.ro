@@ -7,6 +7,7 @@ import { SkeletonGrid } from "@/components/Skeleton";
 import BeforeAfter from "@/components/BeforeAfter";
 import SectionHead from "@/components/ui/SectionHead";
 import bundled from "../../../data/lucrari.json";
+import { serviceFilters } from "@/lib/portfolio";
 
 interface Lucrare {
   id: string;
@@ -18,15 +19,6 @@ interface Lucrare {
   createdAt: string;
 }
 
-const serviceFilters = [
-  "Toate",
-  "Tuns Gazon",
-  "Toaletare Pomi & Arbuști",
-  "Tuns Gard Viu",
-  "Plantări Profesionale",
-  "Montaj Gazon Rulou",
-  "Sistem Irigații",
-];
 
 export default function Portofoliu() {
   const [active, setActive] = useState("Toate");
@@ -53,7 +45,8 @@ export default function Portofoliu() {
 
   const filtered = active === "Toate"
     ? lucrari
-    : lucrari.filter((l) => l.services.some((s) => s.includes(active.replace("Toate", ""))));
+    : lucrari.filter((l) => l.services.includes(active));
+  const filters = serviceFilters(lucrari);
 
   function openLucrare(l: Lucrare) {
     setSelected(l);
@@ -77,7 +70,7 @@ export default function Portofoliu() {
 
         {/* Filters */}
         <div className="flex flex-wrap gap-2 mb-10">
-          {serviceFilters.map((f) => (
+          {filters.map((f) => (
             <button
               key={f}
               onClick={() => setActive(f)}

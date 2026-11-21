@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/blog" },
   title: "Blog — Sfaturi Grădinărit",
   description: "Sfaturi practice de grădinărit, ghiduri și articole utile de la Immobilien Garten Service Timișoara.",
 };

@@ -17,8 +17,9 @@ export default function SectionHead({
   as?: "h1" | "h2";
 }) {
   const center = align === "center";
+  const Wrap = H === "h1" ? "div" : Reveal; // page titles render visible immediately (LCP, no-JS)
   return (
-    <Reveal className={`mb-14 flex flex-wrap items-end gap-8 ${center ? "justify-center text-center" : "justify-between"}`}>
+    <Wrap className={`mb-14 flex flex-wrap items-end gap-8 ${center ? "justify-center text-center" : "justify-between"}`}>
       <div className={center ? "flex flex-col items-center" : ""}>
         <div className="eyebrow">{eyebrow}</div>
         <H className="h-sec max-w-[780px]">{title}</H>
@@ -26,6 +27,6 @@ export default function SectionHead({
       </div>
       {lead && !center && <p className="lead max-w-[560px]">{lead}</p>}
       {aside}
-    </Reveal>
+    </Wrap>
   );
 }

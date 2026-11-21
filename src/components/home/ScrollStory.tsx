@@ -25,16 +25,21 @@ export default function ScrollStory() {
   const bar = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
   const [loaded, setLoaded] = useState(false);
+  const [failed, setFailed] = useState(false);
   const prices = usePrices();
 
   // load the video into a blob after the page has loaded → every seek is local
   useEffect(() => {
     let cancelled = false;
     let url = "";
+    const ctrl = new AbortController();
     const start = async () => {
       try {
-        const res = await fetch(pickSource());
-        if (!res.ok || !res.body) return;
+        const res = await fetch(pickSource(), { signal: ctrl.signal });
+        if (!res.ok || !res.body) {
+          setFailed(true);
+          return;
+        }
         const total = Number(res.headers.get("content-length")) || 0;
         const reader = res.body.getReader();
         const parts: BlobPart[] = [];
@@ -57,13 +62,15 @@ export default function ScrollStory() {
           .then(() => v.pause())
           .catch(() => {});
       } catch {
-        /* poster stays; scrolling still drives captions */
+        /* aborted or network error: poster stays; scrolling still drives captions */
+        if (!cancelled) setFailed(true);
       }
     };
     if (document.readyState === "complete") start();
     else window.addEventListener("load", start, { once: true });
     return () => {
       cancelled = true;
+      ctrl.abort(); // leaving the page stops the 11–28 MB download
       window.removeEventListener("load", start);
       if (url) URL.revokeObjectURL(url);
     };
@@ -83,14 +90,18 @@ export default function ScrollStory() {
     let last = performance.now();
     let lastK = -1;
     let mx = 0, my = 0, px = 0, py = 0;
+    let visible = true;
+    let raf = 0;
     const onScroll = () => (target = progress());
+    const onResize = () => (target = progress());
     const onMove = (e: PointerEvent) => {
       mx = e.clientX / innerWidth - 0.5;
       my = e.clientY / innerHeight - 0.5;
     };
     addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("resize", onResize, { passive: true });
+    addEventListener("orientationchange", onResize);
     if (fine && !reduce) addEventListener("pointermove", onMove, { passive: true });
-    let raf = 0;
     const tick = (now: number) => {
       const dt = Math.min(64, now - last) / 16.67;
       last = now;
@@ -105,17 +116,32 @@ export default function ScrollStory() {
       if (hero.current) {
         hero.current.style.opacity = String(Math.max(0, 1 - t / 1.6));
         hero.current.style.pointerEvents = t > 1.2 ? "none" : "";
+        const hide = t > 1.2; // faded CTAs must not take keyboard focus
+        if (hero.current.inert !== hide) hero.current.inert = hide;
       }
       const k = segmentAt(t, STORY_STARTS);
       if (k !== lastK) {
         lastK = k;
         setActive(k);
       }
-      raf = requestAnimationFrame(tick);
+      raf = visible ? requestAnimationFrame(tick) : 0;
     };
     raf = requestAnimationFrame(tick);
+    // stop the loop while the story is off-screen; resume when it comes back
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible && !raf) {
+        last = performance.now();
+        target = progress();
+        raf = requestAnimationFrame(tick);
+      }
+    });
+    io.observe(track.current!);
     return () => {
+      io.disconnect();
       cancelAnimationFrame(raf);
+      removeEventListener("resize", onResize);
+      removeEventListener("orientationchange", onResize);
       removeEventListener("scroll", onScroll);
       removeEventListener("pointermove", onMove);
     };
@@ -136,7 +162,7 @@ export default function ScrollStory() {
           <img className={s.poster} src="/img/story-poster.webp" alt="" fetchPriority="high" />
           <video ref={video} muted playsInline preload="none" disablePictureInPicture aria-hidden="true" />
           <div className={s.shade} />
-          <div className={`${s.load} ${loaded ? s.loadDone : ""}`}>
+          <div className={`${s.load} ${loaded || failed ? s.loadDone : ""}`}>
             <i ref={bar} />
           </div>
         </div>
