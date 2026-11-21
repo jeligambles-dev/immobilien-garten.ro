@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import SectionHead from "@/components/ui/SectionHead";
 import ServicesView from "@/components/services/ServicesView";
+import { getPrices } from "@/lib/content.server";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Servicii & Prețuri",
@@ -10,7 +13,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/servicii" },
 };
 
-export default function ServiciiPage() {
+export default async function ServiciiPage() {
+  const prices = await getPrices();
   return (
     <section className="glow-bg pb-28 pt-40">
       <div className="wrap">
@@ -25,7 +29,7 @@ export default function ServiciiPage() {
             </>
           }
         />
-        <ServicesView />
+        <ServicesView prices={prices} />
       </div>
     </section>
   );

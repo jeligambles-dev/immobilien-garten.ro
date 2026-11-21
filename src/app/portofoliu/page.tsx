@@ -105,7 +105,7 @@ export default function Portofoliu() {
                 {/* Cover photo */}
                 <div className="h-52 w-full shrink-0 relative overflow-hidden">
                   {l.photos[0] ? (
-                    <Image src={l.photos[0]} alt={l.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <Image src={l.photos[0]} alt={l.title} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />
                   ) : (
                     <div className="h-full bg-gradient-to-br from-[#1f4a2f] to-[#0d2016] flex items-center justify-center">
                       <ImageIcon className="h-12 w-12 text-white/40" />
@@ -146,7 +146,7 @@ export default function Portofoliu() {
       {/* Fullscreen Image Viewer */}
       {fullscreen && selected?.photos[photoIdx] && (
         <div className="fixed inset-0 z-[60] bg-black flex items-center justify-center" onClick={() => setFullscreen(false)}>
-          <Image src={selected.photos[photoIdx]} alt={selected.title} fill className="object-contain" />
+          <Image src={selected.photos[photoIdx]} alt={selected.title} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-contain" />
           <button onClick={() => setFullscreen(false)} className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 text-white p-2.5 rounded-full cursor-pointer z-10" aria-label="Închide">
             <Minimize2 className="h-6 w-6" />
           </button>
@@ -171,7 +171,7 @@ export default function Portofoliu() {
             {/* Photo gallery */}
             <div className="relative h-72 sm:h-80 cursor-pointer" onClick={() => setFullscreen(true)}>
               {selected.photos[photoIdx] ? (
-                <Image src={selected.photos[photoIdx]} alt={selected.title} fill className="object-cover rounded-t-2xl" />
+                <Image src={selected.photos[photoIdx]} alt={selected.title} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover rounded-t-2xl" />
               ) : (
                 <div className="h-full bg-gradient-to-br from-[#1f4a2f] to-[#0d2016] rounded-t-2xl" />
               )}

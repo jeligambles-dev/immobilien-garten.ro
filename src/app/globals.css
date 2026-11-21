@@ -349,3 +349,13 @@ body:has(.site) {
 @media (prefers-reduced-motion: reduce) {
   .garten-pin__dot--main { animation: none; }
 }
+
+/* admin shares the dark glass theme (it renders outside .site) */
+html:has(.admin-root),
+body:has(.admin-root) {
+  background: #07140d;
+  color-scheme: dark;
+}
+.admin-root option {
+  background: #0d2016;
+}

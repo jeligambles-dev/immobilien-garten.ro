@@ -1,6 +1,10 @@
 import ServicePage, { serviceMetadata } from "@/components/ServicePage";
 
-export const metadata = serviceMetadata("plantari");
+export const dynamic = "force-dynamic"; // admin edits show immediately
+
+export function generateMetadata() {
+  return serviceMetadata("plantari");
+}
 
 export default function Page() {
   return <ServicePage slug="plantari" />;

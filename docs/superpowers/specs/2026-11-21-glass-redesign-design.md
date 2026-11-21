@@ -94,3 +94,10 @@ Produse, FAQ, cookies.
   descriptions beyond the first.
 - No test suite exists; verification = `next build` + browser checks (desktop + mobile width,
   scroll smoothness metrics, no console errors, all pages 200).
+
+## Addendum (2026-11-22, owner requests)
+
+- Logo: dark-theme variant `public/logo-light.png` (grey → light ink, greens brightened) replaces the white pill.
+- Coverage map: real OpenStreetMap (Leaflet) recoloured to the palette via CSS filter, amber/leaf pins from `src/lib/areas.ts`, dashed 14 km coverage circle; scroll-wheel zoom off. OSM attribution kept.
+- Admin restyled to the dark glass theme and extended: **Video principal** (desktop/mobile video + poster upload, reset), **Pagini servicii** (intro, price note, features, steps, FAQ, SEO per service, reset), **Întrebări frecvente** (general FAQ). Stored in site-content.json (`storyVideo`, `serviceContent`, `generalFaq`), merged over code defaults (`src/lib/contentMerge.ts`). Home, /servicii, service pages and FAQ render dynamically so edits show immediately. The unused hero-carousel tab was removed (data kept).
+- Uploaded files are streamed with HTTP Range support; videos ≤ 80 MB (MP4/WebM). Story video URLs only accept same-site paths.

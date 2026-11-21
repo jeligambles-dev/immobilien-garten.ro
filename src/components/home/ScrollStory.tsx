@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Phone, ArrowRight } from "lucide-react";
-import { SERVICES, STORY_STARTS, priceFor } from "@/lib/services";
+import { SERVICES, STORY_STARTS, priceFor, type PriceRow } from "@/lib/services";
+import type { StoryVideo } from "@/lib/contentMerge";
 import { usePrices } from "@/components/services/usePrices";
 import { segmentAt, snapToFrame, easeStep } from "@/lib/scrub";
 import s from "./ScrollStory.module.css";
@@ -12,13 +13,13 @@ const DURATION = 30;
 const FPS = 24;
 const LABELS = ["Sosire", ...SERVICES.map((x) => x.title)];
 
-function pickSource(): string {
+function pickSource(video: StoryVideo): string {
   const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
   const small = Math.min(screen.width, screen.height) * devicePixelRatio < 900 || innerWidth < 760 || !!conn?.saveData;
-  return small ? "/video/story-720.mp4" : "/video/story-1440.mp4";
+  return small ? video.mobile : video.desktop;
 }
 
-export default function ScrollStory() {
+export default function ScrollStory({ video: src, prices: initialPrices }: { video: StoryVideo; prices?: PriceRow[] }) {
   const track = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const hero = useRef<HTMLDivElement>(null);
@@ -26,7 +27,7 @@ export default function ScrollStory() {
   const [active, setActive] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
-  const prices = usePrices();
+  const prices = usePrices(initialPrices);
 
   // load the video into a blob after the page has loaded → every seek is local
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function ScrollStory() {
     const ctrl = new AbortController();
     const start = async () => {
       try {
-        const res = await fetch(pickSource(), { signal: ctrl.signal });
+        const res = await fetch(pickSource(src), { signal: ctrl.signal });
         if (!res.ok || !res.body) {
           setFailed(true);
           return;
@@ -74,7 +75,7 @@ export default function ScrollStory() {
       window.removeEventListener("load", start);
       if (url) URL.revokeObjectURL(url);
     };
-  }, []);
+  }, [src.desktop, src.mobile]);
 
   // scroll → eased progress → frame-snapped seek (only when the decoder is free)
   useEffect(() => {
@@ -159,7 +160,7 @@ export default function ScrollStory() {
       <div className={s.pin}>
         <div className={s.stage}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className={s.poster} src="/img/story-poster.webp" alt="" fetchPriority="high" />
+          <img className={s.poster} src={src.poster} alt="" fetchPriority="high" />
           <video ref={video} muted playsInline preload="none" disablePictureInPicture aria-hidden="true" />
           <div className={s.shade} />
           <div className={`${s.load} ${loaded || failed ? s.loadDone : ""}`}>

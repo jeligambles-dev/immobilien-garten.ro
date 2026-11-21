@@ -2,14 +2,14 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight, Check, Phone } from "lucide-react";
 import { SERVICES, serviceBySlug, type ServiceSlug } from "@/lib/services";
-import { SERVICE_CONTENT } from "@/lib/serviceContent";
+import { getServiceContent, getPrices } from "@/lib/content.server";
 import Reveal from "@/components/ui/Reveal";
 import TiltCard from "@/components/ui/TiltCard";
 import LivePrice, { LivePriceNote } from "@/components/services/LivePrice";
 import LoopVideo from "@/components/services/LoopVideo";
 
-export function serviceMetadata(slug: ServiceSlug): Metadata {
-  const c = SERVICE_CONTENT[slug];
+export async function serviceMetadata(slug: ServiceSlug): Promise<Metadata> {
+  const c = await getServiceContent(slug);
   return {
     title: c.metaTitle,
     description: c.metaDescription,
@@ -18,9 +18,9 @@ export function serviceMetadata(slug: ServiceSlug): Metadata {
   };
 }
 
-export default function ServicePage({ slug }: { slug: ServiceSlug }) {
+export default async function ServicePage({ slug }: { slug: ServiceSlug }) {
   const def = serviceBySlug(slug)!;
-  const c = SERVICE_CONTENT[slug];
+  const [c, prices] = await Promise.all([getServiceContent(slug), getPrices()]);
   const idx = SERVICES.findIndex((s) => s.slug === slug);
   const others = [1, 2, 3].map((k) => SERVICES[(idx + k) % SERVICES.length]);
 
@@ -39,7 +39,7 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
             <h1 className="h-hero !text-[clamp(38px,5vw,64px)]">{def.title}</h1>
             <p className="lead mt-5">{c.intro}</p>
             <div className="mt-7 flex flex-wrap items-center gap-3">
-              <LivePrice slug={slug} className="!border !border-accent/50 !bg-accent/15 !px-4 !py-2.5 !text-base !text-accent" />
+              <LivePrice slug={slug} prices={prices} className="!border !border-accent/50 !bg-accent/15 !px-4 !py-2.5 !text-base !text-accent" />
               <a href="tel:0747469681" className="btn-cta">
                 <Phone className="h-4 w-4" /> Sună acum
               </a>
@@ -47,7 +47,7 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
                 Cere ofertă <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-            <LivePriceNote slug={slug} qualifier={c.priceNote} className="mt-4 text-sm text-ink/55" />
+            <LivePriceNote slug={slug} prices={prices} qualifier={c.priceNote} className="mt-4 text-sm text-ink/55" />
           </div>
         </div>
       </section>
