@@ -59,6 +59,7 @@ body:has(.site) {
   letter-spacing: -0.02em;
 }
 
+@layer components {
 /* soft glows behind content sections */
 .glow-bg {
   background:
@@ -247,6 +248,7 @@ body:has(.site) {
 }
 .faq-item[open] summary::after {
   transform: rotate(45deg);
+}
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Phone, ArrowRight } from "lucide-react";
-import { SERVICES, STORY_STARTS, priceFor, type PriceRow } from "@/lib/services";
+import { SERVICES, STORY_STARTS, priceFor } from "@/lib/services";
+import { usePrices } from "@/components/services/usePrices";
 import { segmentAt, snapToFrame, easeStep } from "@/lib/scrub";
 import s from "./ScrollStory.module.css";
 
@@ -24,15 +25,7 @@ export default function ScrollStory() {
   const bar = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
   const [loaded, setLoaded] = useState(false);
-  const [prices, setPrices] = useState<PriceRow[] | undefined>();
-
-  // prices (admin-editable)
-  useEffect(() => {
-    fetch("/api/admin/content")
-      .then((r) => r.json())
-      .then((d) => setPrices(d?.services))
-      .catch(() => {});
-  }, []);
+  const prices = usePrices();
 
   // load the video into a blob after the page has loaded → every seek is local
   useEffect(() => {

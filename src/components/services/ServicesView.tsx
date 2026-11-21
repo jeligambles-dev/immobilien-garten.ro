@@ -1,6 +1,7 @@
 "use client";
 
-import ServiceBento, { usePrices } from "./ServiceBento";
+import ServiceBento from "./ServiceBento";
+import { usePrices } from "./usePrices";
 import PriceEstimator from "./PriceEstimator";
 
 export default function ServicesView() {

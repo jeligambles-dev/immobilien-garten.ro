@@ -1,140 +1,152 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Phone, ArrowLeft, Check } from "lucide-react";
+import type { Metadata } from "next";
+import { ArrowLeft, ArrowRight, Check, Phone } from "lucide-react";
+import { SERVICES, serviceBySlug, type ServiceSlug } from "@/lib/services";
+import { SERVICE_CONTENT } from "@/lib/serviceContent";
+import Reveal from "@/components/ui/Reveal";
+import TiltCard from "@/components/ui/TiltCard";
+import LivePrice from "@/components/services/LivePrice";
+import LoopVideo from "@/components/services/LoopVideo";
 
-interface ServicePageProps {
-  title: string;
-  description: string;
-  image: string;
-  price: string;
-  features: string[];
-  process: { step: string; desc: string }[];
-  faq: { q: string; a: string }[];
+export function serviceMetadata(slug: ServiceSlug): Metadata {
+  const c = SERVICE_CONTENT[slug];
+  return {
+    title: c.metaTitle,
+    description: c.metaDescription,
+    alternates: { canonical: `/servicii/${slug}` },
+    openGraph: { title: c.metaTitle, description: c.metaDescription, images: [serviceBySlug(slug)!.poster] },
+  };
 }
 
-export default function ServicePage({
-  title,
-  description,
-  image,
-  price,
-  features,
-  process,
-  faq,
-}: ServicePageProps) {
-  return (
-    <section className="pt-24 pb-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Link
-          href="/produse"
-          className="inline-flex items-center gap-1 text-sm text-green-600 hover:text-green-700 mb-6"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Toate Serviciile
-        </Link>
+export default function ServicePage({ slug }: { slug: ServiceSlug }) {
+  const def = serviceBySlug(slug)!;
+  const c = SERVICE_CONTENT[slug];
+  const idx = SERVICES.findIndex((s) => s.slug === slug);
+  const others = [1, 2, 3].map((k) => SERVICES[(idx + k) % SERVICES.length]);
 
-        {/* Hero */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
-          <div>
-            <h1 className="font-heading font-bold text-slate-900 text-3xl sm:text-4xl mb-4">
-              {title}
-            </h1>
-            <p className="text-slate-600 text-lg leading-relaxed mb-6">
-              {description}
-            </p>
-            <div className="bg-amber-50 border border-amber-200 rounded-xl px-5 py-3 inline-block mb-6">
-              <p className="text-amber-800 font-semibold text-sm">{price}</p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <a
-                href="tel:0747469681"
-                className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors duration-200 cursor-pointer"
-              >
-                <Phone className="h-5 w-5" />
-                Sună: 0747 469 681
+  return (
+    <>
+      {/* Hero */}
+      <section className="relative isolate flex min-h-[88svh] items-end overflow-hidden pb-16 pt-36">
+        <LoopVideo src={def.clip} poster={def.poster} className="absolute inset-0 -z-20 h-full w-full max-w-none object-cover" />
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(5,16,10,.78)_0%,rgba(5,16,10,.25)_55%,transparent),linear-gradient(0deg,#07140d,transparent_45%)]" />
+        <div className="wrap w-full">
+          <Link href="/servicii" className="mb-6 inline-flex items-center gap-1.5 text-sm text-ink/80 hover:text-white">
+            <ArrowLeft className="h-4 w-4" /> Toate serviciile
+          </Link>
+          <div className="glass max-w-[620px] p-8 sm:p-10">
+            <div className="eyebrow">{def.eyebrow}</div>
+            <h1 className="h-hero !text-[clamp(38px,5vw,64px)]">{def.title}</h1>
+            <p className="lead mt-5">{c.intro}</p>
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <LivePrice slug={slug} className="!border !border-accent/50 !bg-accent/15 !px-4 !py-2.5 !text-base !text-accent" />
+              <a href="tel:0747469681" className="btn-cta">
+                <Phone className="h-4 w-4" /> Sună acum
               </a>
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center gap-2 bg-white hover:bg-green-50 border border-green-200 text-green-700 font-semibold px-6 py-3 rounded-xl transition-colors duration-200"
-              >
-                Solicită Ofertă
+              <Link href={`/contact?serviciu=${slug}`} className="btn-ghost glass">
+                Cere ofertă <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-          </div>
-          <div className="relative h-64 lg:h-auto rounded-2xl overflow-hidden">
-            <Image
-              src={image}
-              alt={title}
-              fill
-              className="object-cover"
-            />
+            <p className="mt-4 text-sm text-ink/55">{c.priceNote}</p>
           </div>
         </div>
+      </section>
 
+      <div className="glow-bg pb-28">
         {/* Features */}
-        <div className="mb-16">
-          <h2 className="font-heading font-bold text-slate-900 text-2xl mb-6">
-            Ce Include
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {features.map((f) => (
-              <div
-                key={f}
-                className="flex items-start gap-3 bg-green-50 rounded-xl px-4 py-3"
-              >
-                <Check className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
-                <p className="text-slate-700 text-sm">{f}</p>
-              </div>
+        <section className="wrap pt-20">
+          <Reveal>
+            <div className="eyebrow">Ce include</div>
+            <h2 className="h-sec mb-12">
+              Ce primești, <em>concret</em>.
+            </h2>
+          </Reveal>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {c.features.map((f, i) => (
+              <Reveal key={f} delay={(i % 3) * 80}>
+                <div className="glass flex h-full items-start gap-4 p-6">
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent/15 text-accent">
+                    <Check className="h-5 w-5" />
+                  </span>
+                  <span className="pt-1.5 leading-relaxed">{f}</span>
+                </div>
+              </Reveal>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Process */}
-        <div className="mb-16">
-          <h2 className="font-heading font-bold text-slate-900 text-2xl mb-6">
-            Cum Lucrăm
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {process.map((p, i) => (
-              <div
-                key={i}
-                className="bg-white border border-green-100 rounded-xl p-5"
-              >
-                <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center font-bold text-sm mb-3">
-                  {i + 1}
+        <section className="wrap pt-28">
+          <Reveal>
+            <div className="eyebrow">Cum lucrăm</div>
+            <h2 className="h-sec mb-12">
+              Patru pași, <em>fără surprize</em>.
+            </h2>
+          </Reveal>
+          <ol className="relative grid gap-5 md:grid-cols-4">
+            <span className="absolute left-0 right-0 top-[34px] hidden h-px bg-gradient-to-r from-accent/0 via-accent/60 to-accent/0 md:block" aria-hidden />
+            {c.process.map((p, i) => (
+              <Reveal as="li" key={p.step} delay={i * 100} className="relative">
+                <div className="glass h-full p-6">
+                  <div className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-accent font-heading text-lg font-black text-accent-ink shadow-[0_0_0_6px_rgba(245,184,61,.18)]">
+                    {i + 1}
+                  </div>
+                  <h3 className="mb-2 text-xl font-extrabold">{p.step}</h3>
+                  <p className="text-[15px] leading-relaxed text-muted">{p.desc}</p>
                 </div>
-                <h3 className="font-semibold text-slate-900 text-sm mb-1">
-                  {p.step}
-                </h3>
-                <p className="text-slate-500 text-xs leading-relaxed">
-                  {p.desc}
-                </p>
-              </div>
+              </Reveal>
             ))}
-          </div>
-        </div>
+          </ol>
+        </section>
 
         {/* FAQ */}
-        <div className="max-w-2xl">
-          <h2 className="font-heading font-bold text-slate-900 text-2xl mb-6">
-            Întrebări Frecvente
-          </h2>
-          <div className="space-y-3">
-            {faq.map((f) => (
-              <details
-                key={f.q}
-                className="group bg-white border border-green-100 rounded-xl overflow-hidden"
-              >
-                <summary className="flex items-center justify-between px-5 py-4 cursor-pointer text-sm font-medium text-slate-900 hover:bg-green-50 transition-colors duration-200 list-none">
-                  {f.q}
-                </summary>
-                <div className="px-5 pb-4 text-sm text-slate-600 leading-relaxed">
-                  {f.a}
-                </div>
-              </details>
+        <section className="wrap pt-28">
+          <Reveal className="text-center">
+            <div className="eyebrow justify-center">Întrebări frecvente</div>
+            <h2 className="h-sec mb-12">Bine de știut.</h2>
+          </Reveal>
+          <div className="mx-auto flex max-w-[860px] flex-col gap-3">
+            {c.faq.map((f, i) => (
+              <Reveal key={f.q} delay={i * 60}>
+                <details className="faq-item glass !rounded-[20px] px-6" open={i === 0}>
+                  <summary>{f.q}</summary>
+                  <p className="pb-6 leading-relaxed text-muted">{f.a}</p>
+                </details>
+              </Reveal>
             ))}
           </div>
-        </div>
+        </section>
+
+        {/* Other services */}
+        <section className="wrap pt-28">
+          <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <div className="eyebrow">Alte servicii</div>
+              <h2 className="h-sec">Totul, de la aceeași echipă.</h2>
+            </div>
+            <Link href="/servicii" className="btn-ghost glass">
+              Toate serviciile <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Reveal>
+          <div className="grid gap-5 md:grid-cols-3">
+            {others.map((o, i) => (
+              <Reveal key={o.slug} delay={i * 80}>
+                <TiltCard className="h-[260px] overflow-hidden rounded-[26px]">
+                  <Link href={`/servicii/${o.slug}`} className="group block h-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={o.poster} alt={o.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105" />
+                    <span className="absolute inset-0 bg-gradient-to-b from-transparent to-[rgba(5,16,10,.85)]" />
+                    <span className="glass absolute inset-x-3.5 bottom-3.5 flex items-center justify-between !rounded-[18px] px-5 py-4">
+                      <span className="font-heading text-xl font-extrabold">{o.title}</span>
+                      <ArrowRight className="h-5 w-5 text-accent" />
+                    </span>
+                  </Link>
+                </TiltCard>
+              </Reveal>
+            ))}
+          </div>
+        </section>
       </div>
-    </section>
+    </>
   );
 }

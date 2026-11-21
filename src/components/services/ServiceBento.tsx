@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { SERVICES, priceFor, type PriceRow, type ServiceSlug } from "@/lib/services";
 import Reveal from "@/components/ui/Reveal";
 import TiltCard from "@/components/ui/TiltCard";
@@ -12,17 +11,6 @@ const SPAN: Partial<Record<ServiceSlug, string>> = {
   "toaletare-pomi": "sm:col-span-2",
   irigatii: "sm:col-span-2",
 };
-
-export function usePrices() {
-  const [rows, setRows] = useState<PriceRow[] | undefined>();
-  useEffect(() => {
-    fetch("/api/admin/content")
-      .then((r) => r.json())
-      .then((d) => setRows(Array.isArray(d?.services) ? d.services : []))
-      .catch(() => setRows([]));
-  }, []);
-  return rows;
-}
 
 export default function ServiceBento({ rows }: { rows: PriceRow[] | undefined }) {
   return (
