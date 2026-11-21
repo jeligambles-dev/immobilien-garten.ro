@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { MoveHorizontal } from "lucide-react";
+import bundled from "../../data/site-content.json";
 
 interface Comparison {
   id: string;
@@ -12,79 +13,84 @@ interface Comparison {
   after: string;
 }
 
-const fallback: Comparison[] = [
-  { id: "1", label: "Amenajare Grădină cu Pietriș", desc: "De la teren gol la grădină decorativă.", before: "/uploads/portfolio/before-gravel.jpg", after: "/uploads/portfolio/after-gravel.jpg" },
-  { id: "2", label: "Regenerare Gazon", desc: "Gazon deteriorat transformat în covor verde.", before: "/uploads/portfolio/before-lawn.jpg", after: "/uploads/portfolio/after-lawn.jpg" },
-  { id: "3", label: "Curățare Curte", desc: "Zonă cu buruieni transformată în gazon impecabil.", before: "/uploads/portfolio/before-fence.jpg", after: "/uploads/portfolio/after-fence.jpg" },
-];
+const FALLBACK = ((bundled as { beforeAfter?: Comparison[] }).beforeAfter ?? []) as Comparison[];
 
 export default function BeforeAfter() {
-  const [comparisons, setComparisons] = useState<Comparison[]>(fallback);
+  const [items, setItems] = useState<Comparison[]>(FALLBACK);
   const [current, setCurrent] = useState(0);
-  const [sliderPos, setSliderPos] = useState(50);
-  const [isDragging, setIsDragging] = useState(false);
+  const [pos, setPos] = useState(50);
+  const dragging = useRef(false);
 
   useEffect(() => {
     fetch("/api/admin/content")
-      .then((r) => r.json())
-      .then((data) => { if (data.beforeAfter?.length) setComparisons(data.beforeAfter); })
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((d) => {
+        if (Array.isArray(d?.beforeAfter) && d.beforeAfter.length) setItems(d.beforeAfter);
+      })
       .catch(() => {});
   }, []);
 
-  const pair = comparisons[current];
+  const pair = items[Math.min(current, items.length - 1)];
+  if (!pair) return null;
 
-  function handleMove(e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) {
-    if (!isDragging) return;
-    const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
-    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
-    setSliderPos(Math.max(5, Math.min(95, ((clientX - rect.left) / rect.width) * 100)));
-  }
-
-  function next() { setCurrent((c) => (c + 1) % comparisons.length); setSliderPos(50); }
-  function prev() { setCurrent((c) => (c - 1 + comparisons.length) % comparisons.length); setSliderPos(50); }
+  const setFrom = (e: PointerEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    setPos(Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100)));
+  };
 
   return (
-    <section className="py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
-          <h2 className="font-heading font-bold text-slate-900 text-3xl sm:text-4xl mb-4">Înainte & După</h2>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto">Trage slider-ul pentru a vedea transformarea. Rezultate reale, clienți mulțumiți.</p>
+    <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+      <div
+        className="relative aspect-[4/3] cursor-ew-resize touch-pan-y select-none overflow-hidden rounded-[28px] shadow-[0_40px_90px_-30px_rgba(0,0,0,.8)]"
+        onPointerDown={(e) => {
+          dragging.current = true;
+          e.currentTarget.setPointerCapture(e.pointerId);
+          setFrom(e);
+        }}
+        onPointerMove={(e) => dragging.current && setFrom(e)}
+        onPointerUp={() => (dragging.current = false)}
+        onPointerCancel={() => (dragging.current = false)}
+        role="slider"
+        aria-label="Comparație înainte și după"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(pos)}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowLeft") setPos((p) => Math.max(0, p - 5));
+          if (e.key === "ArrowRight") setPos((p) => Math.min(100, p + 5));
+        }}
+      >
+        <Image src={pair.before} alt={`Înainte — ${pair.label}`} fill sizes="(min-width:1024px) 60vw, 100vw" className="object-cover" draggable={false} />
+        <div className="absolute inset-0" style={{ clipPath: `inset(0 0 0 ${pos}%)` }}>
+          <Image src={pair.after} alt={`După — ${pair.label}`} fill sizes="(min-width:1024px) 60vw, 100vw" className="object-cover" draggable={false} />
         </div>
-        <div className="max-w-3xl mx-auto">
-          <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden cursor-col-resize select-none shadow-xl border border-green-100"
-            onMouseMove={handleMove} onTouchMove={handleMove}
-            onMouseDown={() => setIsDragging(true)} onMouseUp={() => setIsDragging(false)}
-            onMouseLeave={() => setIsDragging(false)} onTouchStart={() => setIsDragging(true)} onTouchEnd={() => setIsDragging(false)}
-          >
-            <div className="absolute inset-0">
-              {pair?.after && <Image src={pair.after} alt={`După: ${pair.label}`} fill className="object-cover" />}
-              <div className="absolute top-3 right-3 bg-green-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg z-20">DUPĂ</div>
-            </div>
-            <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}>
-              {pair?.before && <Image src={pair.before} alt={`Înainte: ${pair.label}`} fill className="object-cover" />}
-              <div className="absolute top-3 left-3 bg-slate-700 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg z-20">ÎNAINTE</div>
-            </div>
-            <div className="absolute top-0 bottom-0 w-0.5 bg-white z-10" style={{ left: `${sliderPos}%` }}>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white shadow-xl flex items-center justify-center">
-                <div className="flex items-center gap-0.5 text-green-700"><ChevronLeft className="h-5 w-5" /><ChevronRight className="h-5 w-5" /></div>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center justify-between mt-6">
-            <button onClick={prev} className="h-10 w-10 rounded-full border border-green-200 hover:border-green-400 text-green-600 flex items-center justify-center cursor-pointer" aria-label="Anterior"><ChevronLeft className="h-5 w-5" /></button>
-            <div className="text-center flex-1 px-4">
-              <h3 className="font-heading font-semibold text-slate-900">{pair?.label}</h3>
-              <p className="text-slate-500 text-sm mt-1">{pair?.desc}</p>
-            </div>
-            <button onClick={next} className="h-10 w-10 rounded-full border border-green-200 hover:border-green-400 text-green-600 flex items-center justify-center cursor-pointer" aria-label="Următor"><ChevronRight className="h-5 w-5" /></button>
-          </div>
-          <div className="flex justify-center gap-2 mt-4">
-            {comparisons.map((_, i) => (
-              <button key={i} onClick={() => { setCurrent(i); setSliderPos(50); }} className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${i === current ? "w-6 bg-green-600" : "w-2 bg-slate-200 hover:bg-slate-300"}`} aria-label={`Comparație ${i + 1}`} />
-            ))}
-          </div>
+        <span className="absolute left-4 top-4 rounded-full bg-black/55 px-3.5 py-1.5 text-[13px] font-semibold text-white backdrop-blur-md">Înainte</span>
+        <span className="absolute right-4 top-4 rounded-full bg-accent px-3.5 py-1.5 text-[13px] font-semibold text-accent-ink">După</span>
+        <div className="absolute inset-y-0 w-0.5 bg-white shadow-[0_0_20px_rgba(0,0,0,.4)]" style={{ left: `${pos}%` }}>
+          <span className="glass absolute left-1/2 top-1/2 grid h-14 w-14 -translate-x-1/2 -translate-y-1/2 place-items-center !rounded-full">
+            <MoveHorizontal className="h-6 w-6" />
+          </span>
         </div>
       </div>
-    </section>
+
+      <div className="glass flex flex-col gap-3 p-6 sm:p-8">
+        {items.map((c, i) => (
+          <button
+            key={c.id}
+            onClick={() => {
+              setCurrent(i);
+              setPos(50);
+            }}
+            className={`rounded-[18px] border px-5 py-4 text-left transition-colors ${
+              i === current ? "border-accent/60 bg-white/10" : "border-white/10 hover:bg-white/5"
+            }`}
+          >
+            <b className="mb-1 block font-heading text-lg">{c.label}</b>
+            {i === current && <span className="block text-sm leading-relaxed text-muted">{c.desc}</span>}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }

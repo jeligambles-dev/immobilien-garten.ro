@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { X, ImageIcon, MapPin, ChevronLeft, ChevronRight, Maximize2, Minimize2 } from "lucide-react";
 import { SkeletonGrid } from "@/components/Skeleton";
+import BeforeAfter from "@/components/BeforeAfter";
+import SectionHead from "@/components/ui/SectionHead";
+import bundled from "../../../data/lucrari.json";
 
 interface Lucrare {
   id: string;
@@ -35,9 +38,9 @@ export default function Portofoliu() {
 
   useEffect(() => {
     fetch("/api/admin/lucrari")
-      .then((r) => r.json())
-      .then((data) => { setLucrari(data); setLoading(false); })
-      .catch(() => setLoading(false));
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((data) => { setLucrari(Array.isArray(data) ? data : (bundled as Lucrare[])); setLoading(false); })
+      .catch(() => { setLucrari(bundled as Lucrare[]); setLoading(false); });
   }, []);
 
   // Scroll to lucrare if hash exists
@@ -58,27 +61,30 @@ export default function Portofoliu() {
   }
 
   return (
-    <section className="pt-24 pb-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h1 className="font-heading font-bold text-slate-900 text-3xl sm:text-4xl mb-4">
-            Portofoliu — Lucrările Noastre
-          </h1>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-            Fiecare proiect este o dovadă a pasiunii și profesionalismului nostru.
-          </p>
+    <section className="glow-bg pt-40 pb-28">
+      <div className="wrap">
+        <SectionHead
+          as="h1"
+          eyebrow="Lucrări"
+          title={<>Trage de linie. <em>Diferența</em> vorbește singură.</>}
+          lead="Grădini reale din Timișoara și împrejurimi — înainte și după."
+        />
+        <BeforeAfter />
+
+        <div className="mt-28">
+          <SectionHead eyebrow="Proiecte" title={<>Proiecte <em>reale</em>, clienți reali.</>} />
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
+        <div className="flex flex-wrap gap-2 mb-10">
           {serviceFilters.map((f) => (
             <button
               key={f}
               onClick={() => setActive(f)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 cursor-pointer ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer ${
                 active === f
-                  ? "bg-green-600 text-white"
-                  : "bg-green-50 text-green-700 hover:bg-green-100"
+                  ? "bg-accent text-accent-ink"
+                  : "glass !rounded-full text-ink/85 hover:text-white"
               }`}
             >
               {f}
@@ -91,8 +97,8 @@ export default function Portofoliu() {
           <SkeletonGrid count={6} />
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">
-            <ImageIcon className="h-12 w-12 text-slate-300 mx-auto mb-3" />
-            <p className="text-slate-500">Nu sunt lucrări în această categorie.</p>
+            <ImageIcon className="h-12 w-12 text-ink/30 mx-auto mb-3" />
+            <p className="text-muted">Nu sunt lucrări în această categorie.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -101,14 +107,14 @@ export default function Portofoliu() {
                 key={l.id}
                 id={`lucrare-${l.id}`}
                 onClick={() => openLucrare(l)}
-                className="group rounded-2xl overflow-hidden border border-green-100 hover:border-green-300 hover:shadow-xl hover:shadow-green-100/50 transition-all duration-300 cursor-pointer text-left bg-white"
+                className="glass group flex w-full flex-col overflow-hidden transition-transform duration-300 hover:-translate-y-1 cursor-pointer text-left"
               >
                 {/* Cover photo */}
-                <div className="h-52 relative overflow-hidden">
+                <div className="h-52 w-full shrink-0 relative overflow-hidden">
                   {l.photos[0] ? (
-                    <Image src={l.photos[0]} alt={l.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <Image src={l.photos[0]} alt={l.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
                   ) : (
-                    <div className="h-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                    <div className="h-full bg-gradient-to-br from-[#1f4a2f] to-[#0d2016] flex items-center justify-center">
                       <ImageIcon className="h-12 w-12 text-white/40" />
                     </div>
                   )}
@@ -121,20 +127,20 @@ export default function Portofoliu() {
 
                 {/* Info */}
                 <div className="p-5">
-                  <h3 className="font-heading font-semibold text-slate-900 mb-2">
+                  <h3 className="font-heading text-xl font-extrabold mb-2">
                     {l.title}
                   </h3>
-                  <p className="text-slate-500 text-sm line-clamp-2 mb-3">
+                  <p className="text-muted text-sm line-clamp-2 mb-3">
                     {l.description}
                   </p>
                   <div className="flex flex-wrap gap-1.5 mb-3">
                     {l.services.map((s) => (
-                      <span key={s} className="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full">
+                      <span key={s} className="chip">
                         {s}
                       </span>
                     ))}
                   </div>
-                  <span className="flex items-center gap-1 text-xs text-slate-400">
+                  <span className="flex items-center gap-1 text-xs text-ink/50">
                     <MapPin className="h-3 w-3" /> {l.location}
                   </span>
                 </div>
@@ -167,14 +173,14 @@ export default function Portofoliu() {
 
       {/* Lightbox */}
       {selected && !fullscreen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelected(null)}>
-          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-[55] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelected(null)}>
+          <div className="glass !bg-[rgba(10,28,18,.92)] max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             {/* Photo gallery */}
             <div className="relative h-72 sm:h-80 cursor-pointer" onClick={() => setFullscreen(true)}>
               {selected.photos[photoIdx] ? (
                 <Image src={selected.photos[photoIdx]} alt={selected.title} fill className="object-cover rounded-t-2xl" />
               ) : (
-                <div className="h-full bg-gradient-to-br from-green-400 to-green-600 rounded-t-2xl" />
+                <div className="h-full bg-gradient-to-br from-[#1f4a2f] to-[#0d2016] rounded-t-2xl" />
               )}
 
               {/* Fullscreen button */}
@@ -207,7 +213,7 @@ export default function Portofoliu() {
             {selected.photos.length > 1 && (
               <div className="flex gap-2 px-6 pt-4 overflow-x-auto">
                 {selected.photos.map((p, i) => (
-                  <button key={i} onClick={() => setPhotoIdx(i)} className={`h-16 w-16 rounded-lg overflow-hidden shrink-0 border-2 cursor-pointer ${i === photoIdx ? "border-green-500" : "border-transparent opacity-60 hover:opacity-100"}`}>
+                  <button key={i} onClick={() => setPhotoIdx(i)} className={`h-16 w-16 rounded-lg overflow-hidden shrink-0 border-2 cursor-pointer ${i === photoIdx ? "border-accent" : "border-transparent opacity-60 hover:opacity-100"}`}>
                     <Image src={p} alt={`Foto ${i + 1}`} width={64} height={64} className="h-full w-full object-cover" />
                   </button>
                 ))}
@@ -216,16 +222,16 @@ export default function Portofoliu() {
 
             {/* Details */}
             <div className="p-6">
-              <h3 className="font-heading font-bold text-slate-900 text-xl mb-2">{selected.title}</h3>
-              <span className="flex items-center gap-1 text-sm text-slate-400 mb-3">
+              <h3 className="font-heading font-extrabold text-2xl mb-2">{selected.title}</h3>
+              <span className="flex items-center gap-1 text-sm text-ink/50 mb-3">
                 <MapPin className="h-4 w-4" /> {selected.location}
               </span>
-              <p className="text-slate-600 leading-relaxed mb-4">{selected.description}</p>
+              <p className="text-muted leading-relaxed mb-4">{selected.description}</p>
               <div>
-                <p className="text-xs font-semibold text-slate-500 mb-2">Servicii efectuate:</p>
+                <p className="text-xs font-semibold text-leaf mb-2 uppercase tracking-[.14em]">Servicii efectuate</p>
                 <div className="flex flex-wrap gap-2">
                   {selected.services.map((s) => (
-                    <span key={s} className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full font-medium">
+                    <span key={s} className="chip !text-sm">
                       {s}
                     </span>
                   ))}
