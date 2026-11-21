@@ -25,7 +25,7 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-3.5 left-1/2 -translate-x-1/2 z-50 w-[min(1160px,calc(100%-24px))]">
-      <div className="glass !rounded-full flex items-center justify-between py-2 pl-2 pr-2.5">
+      <div className="glass !rounded-full !bg-[rgba(7,20,13,.62)] flex items-center justify-between py-2 pl-2 pr-2.5 [text-shadow:0_1px_2px_rgba(0,0,0,.35)]">
         <Link href="/" className="flex items-center rounded-full px-3 py-1" aria-label="Immobilien Garten Service — Acasă">
           <Image src="/logo-light.png" alt="Immobilien Garten Service" width={152} height={46} className="h-[46px] w-[152px]" loading="eager" fetchPriority="high" />
         </Link>
@@ -36,7 +36,7 @@ export default function Navbar() {
               key={l.href}
               href={l.href}
               className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                isActive(pathname, l.href) ? "bg-white/15 text-white" : "text-ink/80 hover:text-white"
+                isActive(pathname, l.href) ? "bg-white/15 text-white" : "text-ink/90 hover:bg-white/10 hover:text-white"
               }`}
             >
               {l.label}
