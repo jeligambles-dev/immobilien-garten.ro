@@ -17,7 +17,7 @@ const li = "text-[15px] text-muted transition-colors hover:text-white";
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-white/10 bg-night pt-20 pb-10">
+    <footer className="relative border-t border-white/10 bg-night pt-20 pb-28 md:pb-10">
       <div className="wrap">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div className="col-span-2 md:col-span-1">
@@ -71,7 +71,20 @@ export default function Footer() {
 
         <div className="mt-16 flex flex-wrap justify-between gap-3 text-[13px] text-ink/45">
           <span>&copy; {new Date().getFullYear()} Immobilien Garten Service. Toate drepturile rezervate.</span>
-          <Link href="/politica-cookies" className="hover:text-ink/80">Politica cookies</Link>
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            <Link href="/politica-cookies" className="hover:text-ink/80">Politica cookies</Link>
+            <span>
+              Made by{" "}
+              <a
+                href="https://ajdigitalsolutions.ro"
+                target="_blank"
+                rel="noopener"
+                className="font-medium text-ink/70 underline-offset-4 transition-colors hover:text-accent hover:underline"
+              >
+                A&amp;J Digital Solutions
+              </a>
+            </span>
+          </div>
         </div>
       </div>
     </footer>
