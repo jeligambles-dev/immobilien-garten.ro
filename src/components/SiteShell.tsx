@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Chatbot from "@/components/Chatbot";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import CookieConsent from "@/components/CookieConsent";
@@ -20,7 +19,6 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
     <div className="site">
       <Navbar />
       <main>{children}</main>
-      <Footer />
       <Chatbot />
       <WhatsAppButton />
       <BackToTop />
